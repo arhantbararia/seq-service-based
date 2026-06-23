@@ -1,5 +1,4 @@
-import { FounderSpotlight } from "@/components/sections/FounderSpotlight";
-import { PhilosophyCards } from "@/components/sections/PhilosophyCards";
+import { CompanyOverview } from "@/components/sections/CompanyOverview";
 import { CTABanner } from "@/components/sections/CTABanner";
 
 export default function About() {
@@ -16,8 +15,7 @@ export default function About() {
         </div>
       </section>
 
-      <FounderSpotlight />
-      <PhilosophyCards />
+      <CompanyOverview />
       
       <CTABanner 
         title="Want to build something lean?" 
