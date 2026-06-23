@@ -1,0 +1,34 @@
+How to Add/Remove Websites
+Open the file: src/data/websites.ts
+To Add: Append a new object to the array following the WebsiteEntry interface.
+typescript
+
+{
+  id: "unique-id",
+  title: "Project Title",
+  verticalId: "healthcare", // Must match an ID in verticals.ts
+  tier: 2,
+  description: "Project description.",
+  imageUrl: "/images/your-image.jpg", // Add image to public/images/
+  features: ["Feature 1", "Feature 2"],
+  techStack: ["Next.js", "Supabase"]
+}
+To Remove: Simply delete the relevant object block from the array. The /catalogue/websites page will automatically update and filter properly.
+How to Add/Remove Automations (n8n Workflows)
+Export your workflow from n8n as a .json file.
+Place the JSON file in the public/workflows/ directory (e.g., public/workflows/new-workflow.json).
+Open src/data/automations.ts
+To Add: Append a new object to the array. Ensure workflowJsonPath points to your new JSON file.
+typescript
+
+{
+  id: "new-automation",
+  name: "Automation Name",
+  description: "Description",
+  verticalId: "cross-vertical",
+  complexity: "Simple",
+  timeSavedHours: 10,
+  workflowJsonPath: "/workflows/new-workflow.json", // Path to the JSON
+  nodeSummary: { total: 5, triggers: ["Webhook"], actions: ["Email"] },
+}
+To Remove: Delete the relevant object from the array. You can optionally delete the JSON file from public/workflows/ to keep the repository clean.

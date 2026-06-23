@@ -1,0 +1,68 @@
+import { Service } from "@/lib/types";
+
+export const services: Service[] = [
+  {
+    id: "tier-1",
+    name: "Digital Presence Foundation",
+    tier: 1,
+    scope: "Static landing page (1–3 pages, forms, email integration)",
+    stack: "Jamstack + Serverless Forms + Edge CDN",
+    features: [
+      "Custom responsive design",
+      "Lead capture forms",
+      "SEO foundational setup",
+      "Cloudflare Edge hosting",
+      "DPDP compliance",
+    ],
+    idealFor: "Consultants, clinics, and businesses needing a professional entry-level digital footprint.",
+    icon: "LayoutTemplate",
+  },
+  {
+    id: "tier-2",
+    name: "Dynamic Business Hub",
+    tier: 2,
+    scope: "Dynamic site with CMS, booking systems, or service catalogs",
+    stack: "Next.js + Headless CMS / Serverless DB",
+    features: [
+      "Content Management System",
+      "Service/Product catalogs",
+      "Dynamic data fetching",
+      "Advanced SEO architecture",
+      "Custom integrations",
+    ],
+    idealFor: "Real estate agencies, medium-sized clinics, and schools needing manageable content.",
+    icon: "Layers",
+  },
+  {
+    id: "tier-3",
+    name: "Operational Automations",
+    tier: 3,
+    scope: "Internal tools, dashboards, and automated workflow pipelines",
+    stack: "Node.js/Go + Serverless DB + Automation Hub",
+    features: [
+      "CRM integrations",
+      "Automated lead routing",
+      "Custom reporting dashboards",
+      "Multi-step n8n workflows",
+      "sequels.diy platform integration",
+    ],
+    idealFor: "B2B manufacturing, heavy retail, and agencies with high manual overhead.",
+    icon: "Workflow",
+  },
+  {
+    id: "tier-4",
+    name: "Custom Platform Architecture",
+    tier: 4,
+    scope: "Scalable cloud applications, custom SaaS, and high-concurrency systems",
+    stack: "Scalable cloud clusters + Redis + heavy load testing",
+    features: [
+      "Microservices architecture",
+      "Custom auth & state persistence",
+      "High availability setup",
+      "Load testing & optimization",
+      "Dedicated infrastructure management",
+    ],
+    idealFor: "EdTech platforms, large-scale testing systems, and enterprise custom software needs.",
+    icon: "Server",
+  },
+];
