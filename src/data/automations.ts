@@ -1,6 +1,7 @@
 import { AutomationEntry } from "@/lib/types";
 
 export const automations: AutomationEntry[] = [
+  // ─── Cross-Vertical ───────────────────────────────────────────────
   {
     id: "auto-lead-capture",
     name: "Unified Lead Intake Routing",
@@ -15,6 +16,182 @@ export const automations: AutomationEntry[] = [
       actions: ["Google Sheets", "Email Notification", "Data Transformation"],
     },
   },
+
+  // ─── CA Firms (Professional Services) ─────────────────────────────
+  {
+    id: "ca-compliance-reminders",
+    name: "Automated Compliance Deadline Reminders",
+    description: "Runs daily to check your Compliance Calendar sheet and sends WhatsApp reminders to clients whose GSTR-3B, ITR, or GST filings are due in 7 days, 2 days, or today.",
+    verticalId: "professional-services",
+    complexity: "Medium",
+    timeSavedHours: 40,
+    workflowJsonPath: "/workflows/CA-firms/Automated Compliance Deadline Reminders.json",
+    nodeSummary: {
+      total: 5,
+      triggers: ["Schedule Trigger"],
+      actions: ["Google Sheets", "If Filter", "Loop Over Items", "WhatsApp Send"],
+    },
+  },
+  {
+    id: "ca-fee-payment-reminders",
+    name: "Automated Fee Payment Reminders",
+    description: "Sends a 3-stage escalating WhatsApp payment reminder sequence (Day 0, Day 3, Day 7) to clients with pending invoices, complete with UPI payment links.",
+    verticalId: "professional-services",
+    complexity: "Complex",
+    timeSavedHours: 60,
+    workflowJsonPath: "/workflows/CA-firms/Automated Fee Payment Reminders.json",
+    nodeSummary: {
+      total: 7,
+      triggers: ["Schedule Trigger"],
+      actions: ["Google Sheets", "Loop Over Items", "Switch Router", "WhatsApp Send (x3)"],
+    },
+  },
+  {
+    id: "ca-conditional-routing",
+    name: "Client Reply Routing & Review Capture",
+    description: "Listens for incoming WhatsApp replies. Happy clients are routed to your Google Review link. Unhappy clients are redirected to a private feedback form with an internal alert emailed to the founding partner.",
+    verticalId: "professional-services",
+    complexity: "Medium",
+    timeSavedHours: 25,
+    workflowJsonPath: "/workflows/CA-firms/Conditional Routing (Handling the Reply).json",
+    nodeSummary: {
+      total: 5,
+      triggers: ["WhatsApp Trigger"],
+      actions: ["Switch Router", "WhatsApp Send (x2)", "Email Send"],
+    },
+  },
+  {
+    id: "ca-document-collection",
+    name: "One-Click Document Collection",
+    description: "Automates the entire document chase process. Reads your Document Tracker sheet, identifies pending clients, and sends tailored WhatsApp reminders with upload links based on service type.",
+    verticalId: "professional-services",
+    complexity: "Complex",
+    timeSavedHours: 80,
+    workflowJsonPath: "/workflows/CA-firms/One-Click Document Collection.json",
+    nodeSummary: {
+      total: 9,
+      triggers: ["Schedule Trigger"],
+      actions: ["Google Sheets (x2)", "If Filter", "Loop Over Items", "Switch Router", "WhatsApp Send (x3)"],
+    },
+  },
+  {
+    id: "ca-satisfaction-outreach",
+    name: "Post-Service Satisfaction Outreach",
+    description: "Monitors your Service Delivery Tracker and automatically sends a WhatsApp check-in when a service is marked as completed, capturing client sentiment in real time.",
+    verticalId: "professional-services",
+    complexity: "Simple",
+    timeSavedHours: 15,
+    workflowJsonPath: "/workflows/CA-firms/The Satisfaction Outreach.json",
+    nodeSummary: {
+      total: 3,
+      triggers: ["Google Sheets Trigger"],
+      actions: ["If Filter", "WhatsApp Send"],
+    },
+  },
+
+  // ─── Law Firms (Professional Services) ────────────────────────────
+  {
+    id: "law-court-hearing-reminder",
+    name: "Court Hearing Date Reminders",
+    description: "Checks your hearing calendar daily and sends WhatsApp reminders to clients with upcoming court dates, ensuring they never miss a hearing.",
+    verticalId: "professional-services",
+    complexity: "Medium",
+    timeSavedHours: 35,
+    workflowJsonPath: "/workflows/law-firms/Court Hearing Reminder.json",
+    nodeSummary: {
+      total: 5,
+      triggers: ["Schedule Trigger"],
+      actions: ["Google Sheets", "If Filter", "Loop Over Items", "Switch Router"],
+    },
+  },
+  {
+    id: "law-instant-lead-capture",
+    name: "Instant Lead Capture & WhatsApp Alerts",
+    description: "Captures incoming leads from your website contact form via webhook, logs them to a Google Sheet, and instantly notifies you and the prospective client on WhatsApp.",
+    verticalId: "professional-services",
+    complexity: "Medium",
+    timeSavedHours: 30,
+    workflowJsonPath: "/workflows/law-firms/Instant Capture & Alerts.json",
+    nodeSummary: {
+      total: 5,
+      triggers: ["Webhook"],
+      actions: ["Set Fields", "Google Sheets", "WhatsApp Send (x2)"],
+    },
+  },
+  {
+    id: "law-followup-reminder",
+    name: "24-Hour Follow-Up Reminder",
+    description: "Automatically follows up with new leads 24 hours after initial contact via a scheduled WhatsApp message, reducing lead drop-off rates.",
+    verticalId: "professional-services",
+    complexity: "Simple",
+    timeSavedHours: 15,
+    workflowJsonPath: "/workflows/law-firms/The 24-Hour Follow-Up Reminder.json",
+    nodeSummary: {
+      total: 3,
+      triggers: ["Schedule Trigger"],
+      actions: ["Google Sheets", "WhatsApp Send"],
+    },
+  },
+  {
+    id: "law-weekly-lead-summary",
+    name: "Weekly Lead Summary Report",
+    description: "Aggregates all leads received during the week, compiles key metrics using a code node, and sends a formatted weekly summary to the partner's WhatsApp every Monday.",
+    verticalId: "professional-services",
+    complexity: "Medium",
+    timeSavedHours: 10,
+    workflowJsonPath: "/workflows/law-firms/Weekly Lead Summary.json",
+    nodeSummary: {
+      total: 4,
+      triggers: ["Schedule Trigger"],
+      actions: ["Google Sheets", "Code (Aggregation)", "WhatsApp Send"],
+    },
+  },
+
+  // ─── Path Labs (Healthcare & Diagnostics) ─────────────────────────
+  {
+    id: "pathlab-appointment-reminders",
+    name: "Appointment Reminder & Prep Instructions",
+    description: "Sends tiered WhatsApp reminders with test-specific preparation instructions (fasting, hydration, etc.) based on the appointment type, routed via a switch node.",
+    verticalId: "healthcare",
+    complexity: "Complex",
+    timeSavedHours: 50,
+    workflowJsonPath: "/workflows/path-labs/Appointment Reminder + Prep Instructions.json",
+    nodeSummary: {
+      total: 6,
+      triggers: ["Schedule Trigger"],
+      actions: ["Google Sheets", "Switch Router", "WhatsApp Send (x3)"],
+    },
+  },
+  {
+    id: "pathlab-lead-gen-wa",
+    name: "Lead Capture & WhatsApp Outreach",
+    description: "Captures new patient inquiries from your website, logs them into a master sheet, and immediately sends a personalized WhatsApp welcome message with booking instructions.",
+    verticalId: "healthcare",
+    complexity: "Medium",
+    timeSavedHours: 30,
+    workflowJsonPath: "/workflows/path-labs/Lead Gen and WA reachout.json",
+    nodeSummary: {
+      total: 4,
+      triggers: ["Webhook"],
+      actions: ["Set Fields", "Google Sheets", "WhatsApp Send"],
+    },
+  },
+  {
+    id: "pathlab-report-sending",
+    name: "Automated Report Delivery",
+    description: "Watches your results sheet for newly completed reports and automatically sends the patient a WhatsApp message with their report link, filtered to only send when results are marked ready.",
+    verticalId: "healthcare",
+    complexity: "Medium",
+    timeSavedHours: 120,
+    workflowJsonPath: "/workflows/path-labs/report sending automation.json",
+    nodeSummary: {
+      total: 4,
+      triggers: ["Google Sheets Trigger"],
+      actions: ["If Filter", "Set Fields", "WhatsApp Send"],
+    },
+  },
+
+  // ─── Legacy Entries ───────────────────────────────────────────────
   {
     id: "auto-review-gen",
     name: "Post-Service Review Generation",
@@ -22,7 +199,7 @@ export const automations: AutomationEntry[] = [
     verticalId: "lifestyle-retail",
     complexity: "Simple",
     timeSavedHours: 20,
-    workflowJsonPath: "/workflows/lead-capture.json", // reusing placeholder for now
+    workflowJsonPath: "/workflows/lead-capture.json",
     nodeSummary: {
       total: 5,
       triggers: ["Webhook"],
@@ -31,7 +208,7 @@ export const automations: AutomationEntry[] = [
   },
   {
     id: "auto-lab-report",
-    name: "Automated Lab Report Delivery",
+    name: "Automated Lab Report Delivery (Email)",
     description: "Watches for new PDF reports in a secure folder, matches them to patient records, and automatically emails the secure link to the patient.",
     verticalId: "healthcare",
     complexity: "Complex",
@@ -42,5 +219,5 @@ export const automations: AutomationEntry[] = [
       triggers: ["FTP Watch", "Folder Trigger"],
       actions: ["Postgres Update", "Email Send", "PDF Parser"],
     },
-  }
+  },
 ];

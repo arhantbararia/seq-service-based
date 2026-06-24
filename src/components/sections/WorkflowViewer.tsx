@@ -54,7 +54,7 @@ export function WorkflowViewer({ jsonUrl }: WorkflowViewerProps) {
                 if(channelOutputs && channelOutputs.length > 0) {
                   channelOutputs.forEach((target: any) => {
                     parsedEdges.push({
-                      id: `e-${sourceNode}-${target.node}`,
+                      id: `e-${sourceNode}-${target.node}-${outputIndex}-${parsedEdges.length}`,
                       source: sourceNode,
                       target: target.node,
                       animated: true,

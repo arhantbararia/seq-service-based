@@ -1,0 +1,414 @@
+﻿{
+    "name":  "One-Click Document Collection",
+    "nodes":  [
+                  {
+                      "parameters":  {
+                                         "content":  "Before building, you must set up your credentials and database in n8n:\n\n    Credentials: Configure your Google Sheets API (via OAuth2 or Service Account) and your WhatsApp Business Cloud credentials inside n8n.\n    The Database: Create a master Google Sheet named \"Document Tracker\" with columns for: Client Name, Phone Number, Email, Service Type (ITR, GST, or Audit), Status (Pending / Received / Issue), Document Link (Google Drive folder or Form link), and Last Reminder Date.",
+                                         "width":  496
+                                     },
+                      "type":  "n8n-nodes-base.stickyNote",
+                      "typeVersion":  1,
+                      "position":  [
+                                       -464,
+                                       -224
+                                   ],
+                      "id":  "719a44f3-4812-41e4-90c6-6477c0a6e362",
+                      "name":  "Sticky Note",
+                      "notes":  "Setup: Configure Google Sheets and WhatsApp credentials, then create a Document Tracker sheet."
+                  },
+                  {
+                      "parameters":  {
+                                         "rule":  {
+                                                      "interval":  [
+                                                                       {
+
+                                                                       }
+                                                                   ]
+                                                  }
+                                     },
+                      "type":  "n8n-nodes-base.scheduleTrigger",
+                      "typeVersion":  1.3,
+                      "position":  [
+                                       0,
+                                       0
+                                   ],
+                      "id":  "a834cb72-803a-496f-a506-6899442c592f",
+                      "name":  "Schedule Trigger",
+                      "notesInFlow":  true,
+                      "notes":  "Runs daily at 9 AM to check for pending document requests."
+                  },
+                  {
+                      "parameters":  {
+                                         "documentId":  {
+                                                            "__rl":  true,
+                                                            "mode":  "list",
+                                                            "value":  ""
+                                                        },
+                                         "sheetName":  {
+                                                           "__rl":  true,
+                                                           "mode":  "list",
+                                                           "value":  ""
+                                                       }
+                                     },
+                      "type":  "n8n-nodes-base.googleSheets",
+                      "typeVersion":  4.7,
+                      "position":  [
+                                       208,
+                                       0
+                                   ],
+                      "id":  "b6292910-c6fe-41d1-a969-b19c01a0173d",
+                      "name":  "Get row(s) in sheet",
+                      "notesInFlow":  true,
+                      "notes":  "Pulls all clients with a Pending document status from the tracker."
+                  },
+                  {
+                      "parameters":  {
+                                         "conditions":  {
+                                                            "options":  {
+                                                                            "caseSensitive":  true,
+                                                                            "leftValue":  "",
+                                                                            "typeValidation":  "strict",
+                                                                            "version":  3
+                                                                        },
+                                                            "conditions":  [
+                                                                               {
+                                                                                   "id":  "b5edc563-0fe9-4423-9a89-4ec3fc592118",
+                                                                                   "leftValue":  "",
+                                                                                   "rightValue":  "",
+                                                                                   "operator":  {
+                                                                                                    "type":  "string",
+                                                                                                    "operation":  "equals",
+                                                                                                    "name":  "filter.operator.equals"
+                                                                                                }
+                                                                               }
+                                                                           ],
+                                                            "combinator":  "and"
+                                                        },
+                                         "options":  {
+
+                                                     }
+                                     },
+                      "type":  "n8n-nodes-base.if",
+                      "typeVersion":  2.3,
+                      "position":  [
+                                       416,
+                                       0
+                                   ],
+                      "id":  "62ec785e-0b58-4c9c-aca3-1af4cfe10a05",
+                      "name":  "If",
+                      "notesInFlow":  true,
+                      "notes":  "Filters clients who haven\u0027t been contacted in the last 3 days."
+                  },
+                  {
+                      "parameters":  {
+                                         "options":  {
+
+                                                     }
+                                     },
+                      "type":  "n8n-nodes-base.splitInBatches",
+                      "typeVersion":  3,
+                      "position":  [
+                                       624,
+                                       -96
+                                   ],
+                      "id":  "b5300a7a-f284-4a28-97c1-ee2d73ea8e10",
+                      "name":  "Loop Over Items",
+                      "notes":  "Processes each qualifying client one at a time.",
+                      "notesInFlow":  true
+                  },
+                  {
+                      "parameters":  {
+                                         "rules":  {
+                                                       "values":  [
+                                                                      {
+                                                                          "conditions":  {
+                                                                                             "options":  {
+                                                                                                             "caseSensitive":  true,
+                                                                                                             "leftValue":  "",
+                                                                                                             "typeValidation":  "strict",
+                                                                                                             "version":  3
+                                                                                                         },
+                                                                                             "conditions":  [
+                                                                                                                {
+                                                                                                                    "leftValue":  "",
+                                                                                                                    "rightValue":  "",
+                                                                                                                    "operator":  {
+                                                                                                                                     "type":  "string",
+                                                                                                                                     "operation":  "equals"
+                                                                                                                                 },
+                                                                                                                    "id":  "ff3a889a-c846-48ef-a0f7-d75272932be5"
+                                                                                                                }
+                                                                                                            ],
+                                                                                             "combinator":  "and"
+                                                                                         }
+                                                                      },
+                                                                      {
+                                                                          "conditions":  {
+                                                                                             "options":  {
+                                                                                                             "caseSensitive":  true,
+                                                                                                             "leftValue":  "",
+                                                                                                             "typeValidation":  "strict",
+                                                                                                             "version":  3
+                                                                                                         },
+                                                                                             "conditions":  [
+                                                                                                                {
+                                                                                                                    "id":  "8e802408-65de-4c92-9b0b-3c0b7e32dad0",
+                                                                                                                    "leftValue":  "",
+                                                                                                                    "rightValue":  "",
+                                                                                                                    "operator":  {
+                                                                                                                                     "type":  "string",
+                                                                                                                                     "operation":  "equals",
+                                                                                                                                     "name":  "filter.operator.equals"
+                                                                                                                                 }
+                                                                                                                }
+                                                                                                            ],
+                                                                                             "combinator":  "and"
+                                                                                         }
+                                                                      },
+                                                                      {
+                                                                          "conditions":  {
+                                                                                             "options":  {
+                                                                                                             "caseSensitive":  true,
+                                                                                                             "leftValue":  "",
+                                                                                                             "typeValidation":  "strict",
+                                                                                                             "version":  3
+                                                                                                         },
+                                                                                             "conditions":  [
+                                                                                                                {
+                                                                                                                    "id":  "a9118aa8-258d-4682-9538-d364621a1fd1",
+                                                                                                                    "leftValue":  "",
+                                                                                                                    "rightValue":  "",
+                                                                                                                    "operator":  {
+                                                                                                                                     "type":  "string",
+                                                                                                                                     "operation":  "equals",
+                                                                                                                                     "name":  "filter.operator.equals"
+                                                                                                                                 }
+                                                                                                                }
+                                                                                                            ],
+                                                                                             "combinator":  "and"
+                                                                                         }
+                                                                      }
+                                                                  ]
+                                                   },
+                                         "options":  {
+
+                                                     }
+                                     },
+                      "type":  "n8n-nodes-base.switch",
+                      "typeVersion":  3.4,
+                      "position":  [
+                                       832,
+                                       32
+                                   ],
+                      "id":  "cc105491-e072-43ed-b678-439761e93b94",
+                      "name":  "Switch",
+                      "notesInFlow":  true,
+                      "notes":  "Routes to the correct message template based on service type (ITR, GST, or Audit)."
+                  },
+                  {
+                      "parameters":  {
+                                         "operation":  "send",
+                                         "additionalFields":  {
+
+                                                              }
+                                     },
+                      "type":  "n8n-nodes-base.whatsApp",
+                      "typeVersion":  1.1,
+                      "position":  [
+                                       1056,
+                                       -160
+                                   ],
+                      "id":  "cced7051-3d39-445e-8fe0-a944019173a5",
+                      "name":  "Send message",
+                      "webhookId":  "e23ceeb3-cfa5-4bae-9d2f-0f182fa9342a",
+                      "notesInFlow":  true,
+                      "notes":  "Sends an ITR-specific document checklist via WhatsApp."
+                  },
+                  {
+                      "parameters":  {
+                                         "operation":  "send",
+                                         "additionalFields":  {
+
+                                                              }
+                                     },
+                      "type":  "n8n-nodes-base.whatsApp",
+                      "typeVersion":  1.1,
+                      "position":  [
+                                       1056,
+                                       64
+                                   ],
+                      "id":  "cc4d4a2f-f8a0-47e5-9e66-c129a7323aee",
+                      "name":  "Send message1",
+                      "webhookId":  "17d2904a-33dc-4385-b9bc-9bfc03764967",
+                      "notesInFlow":  true,
+                      "notes":  "Sends a GST-specific document checklist via WhatsApp."
+                  },
+                  {
+                      "parameters":  {
+                                         "operation":  "send",
+                                         "additionalFields":  {
+
+                                                              }
+                                     },
+                      "type":  "n8n-nodes-base.whatsApp",
+                      "typeVersion":  1.1,
+                      "position":  [
+                                       1040,
+                                       288
+                                   ],
+                      "id":  "1bd96d55-e3f0-4f44-b72a-432dc2e452c8",
+                      "name":  "Send message2",
+                      "webhookId":  "5d9508aa-68b9-4b24-90d2-b4fa2791d525",
+                      "notesInFlow":  true,
+                      "notes":  "Sends an Audit-specific document checklist via WhatsApp."
+                  },
+                  {
+                      "parameters":  {
+                                         "operation":  "appendOrUpdate",
+                                         "documentId":  {
+                                                            "__rl":  true,
+                                                            "mode":  "list",
+                                                            "value":  ""
+                                                        },
+                                         "sheetName":  {
+                                                           "__rl":  true,
+                                                           "mode":  "list",
+                                                           "value":  ""
+                                                       }
+                                     },
+                      "type":  "n8n-nodes-base.googleSheets",
+                      "typeVersion":  4.7,
+                      "position":  [
+                                       1424,
+                                       32
+                                   ],
+                      "id":  "42472ea1-afc1-45d4-a663-4fc66d6aeb80",
+                      "name":  "Append or update row in sheet",
+                      "notesInFlow":  true,
+                      "notes":  "Updates the Last Reminder Date in the tracker after sending."
+                  }
+              ],
+    "pinData":  {
+
+                },
+    "connections":  {
+                        "Schedule Trigger":  {
+                                                 "main":  [
+                                                              [
+                                                                  {
+                                                                      "node":  "Get row(s) in sheet",
+                                                                      "type":  "main",
+                                                                      "index":  0
+                                                                  }
+                                                              ]
+                                                          ]
+                                             },
+                        "Get row(s) in sheet":  {
+                                                    "main":  [
+                                                                 [
+                                                                     {
+                                                                         "node":  "If",
+                                                                         "type":  "main",
+                                                                         "index":  0
+                                                                     }
+                                                                 ]
+                                                             ]
+                                                },
+                        "If":  {
+                                   "main":  [
+                                                [
+                                                    {
+                                                        "node":  "Loop Over Items",
+                                                        "type":  "main",
+                                                        "index":  0
+                                                    }
+                                                ]
+                                            ]
+                               },
+                        "Loop Over Items":  {
+                                                "main":  [
+                                                             [
+
+                                                             ],
+                                                             [
+                                                                 {
+                                                                     "node":  "Switch",
+                                                                     "type":  "main",
+                                                                     "index":  0
+                                                                 }
+                                                             ]
+                                                         ]
+                                            },
+                        "Switch":  {
+                                       "main":  [
+                                                    [
+                                                        {
+                                                            "node":  "Send message",
+                                                            "type":  "main",
+                                                            "index":  0
+                                                        }
+                                                    ],
+                                                    [
+                                                        {
+                                                            "node":  "Send message1",
+                                                            "type":  "main",
+                                                            "index":  0
+                                                        }
+                                                    ],
+                                                    [
+                                                        {
+                                                            "node":  "Send message2",
+                                                            "type":  "main",
+                                                            "index":  0
+                                                        }
+                                                    ]
+                                                ]
+                                   },
+                        "Send message":  {
+                                             "main":  [
+                                                          [
+                                                              {
+                                                                  "node":  "Append or update row in sheet",
+                                                                  "type":  "main",
+                                                                  "index":  0
+                                                              }
+                                                          ]
+                                                      ]
+                                         },
+                        "Send message1":  {
+                                              "main":  [
+                                                           [
+                                                               {
+                                                                   "node":  "Append or update row in sheet",
+                                                                   "type":  "main",
+                                                                   "index":  0
+                                                               }
+                                                           ]
+                                                       ]
+                                          },
+                        "Send message2":  {
+                                              "main":  [
+                                                           [
+                                                               {
+                                                                   "node":  "Append or update row in sheet",
+                                                                   "type":  "main",
+                                                                   "index":  0
+                                                               }
+                                                           ]
+                                                       ]
+                                          }
+                    },
+    "active":  false,
+    "settings":  {
+                     "executionOrder":  "v1",
+                     "availableInMCP":  false
+                 },
+    "versionId":  "929e29a2-a3d3-4f33-a56e-08f0d4534428",
+    "meta":  {
+                 "instanceId":  "19cdbff816187c47f2c2f164215bc7433a1126dea430f9366c8b9599f28afba0"
+             },
+    "id":  "HRAHZXDAR9UbweN0szMaG",
+    "tags":  [
+
+             ]
+}

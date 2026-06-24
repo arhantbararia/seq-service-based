@@ -1,0 +1,136 @@
+﻿{
+    "name":  "Weekly Lead Summary",
+    "nodes":  [
+                  {
+                      "parameters":  {
+                                         "rule":  {
+                                                      "interval":  [
+                                                                       {
+                                                                           "daysInterval":  7,
+                                                                           "triggerAtHour":  9
+                                                                       }
+                                                                   ]
+                                                  }
+                                     },
+                      "type":  "n8n-nodes-base.scheduleTrigger",
+                      "typeVersion":  1.3,
+                      "position":  [
+                                       0,
+                                       0
+                                   ],
+                      "id":  "38793909-3f31-46dc-a5b3-c1364bbc3bb0",
+                      "name":  "Schedule Trigger",
+                      "notesInFlow":  true,
+                      "notes":  "Runs every Monday at 9 AM to generate the weekly report."
+                  },
+                  {
+                      "parameters":  {
+                                         "documentId":  {
+                                                            "__rl":  true,
+                                                            "mode":  "list",
+                                                            "value":  ""
+                                                        },
+                                         "sheetName":  {
+                                                           "__rl":  true,
+                                                           "mode":  "list",
+                                                           "value":  ""
+                                                       }
+                                     },
+                      "type":  "n8n-nodes-base.googleSheets",
+                      "typeVersion":  4.7,
+                      "position":  [
+                                       208,
+                                       0
+                                   ],
+                      "id":  "9e6a9ff0-2951-469d-b90f-53b8ed2e0061",
+                      "name":  "Get row(s) in sheet",
+                      "notesInFlow":  true,
+                      "notes":  "Pulls all leads received in the last 7 days."
+                  },
+                  {
+                      "parameters":  {
+
+                                     },
+                      "type":  "n8n-nodes-base.code",
+                      "typeVersion":  2,
+                      "position":  [
+                                       464,
+                                       0
+                                   ],
+                      "id":  "547bb556-fe9c-43bf-9bbc-5298453dc9b0",
+                      "name":  "Code in JavaScript",
+                      "notesInFlow":  true,
+                      "notes":  "Aggregates lead counts by status (New, Retained, Pending)."
+                  },
+                  {
+                      "parameters":  {
+                                         "operation":  "send",
+                                         "additionalFields":  {
+
+                                                              }
+                                     },
+                      "type":  "n8n-nodes-base.whatsApp",
+                      "typeVersion":  1.1,
+                      "position":  [
+                                       736,
+                                       0
+                                   ],
+                      "id":  "fa5b13bd-dbe0-40c1-97da-5b8a61f16d8f",
+                      "name":  "Send message",
+                      "webhookId":  "8d6ffc7e-70cb-4f47-8210-40537f2d7172",
+                      "notesInFlow":  true,
+                      "notes":  "Sends the formatted weekly summary via WhatsApp."
+                  }
+              ],
+    "pinData":  {
+
+                },
+    "connections":  {
+                        "Schedule Trigger":  {
+                                                 "main":  [
+                                                              [
+                                                                  {
+                                                                      "node":  "Get row(s) in sheet",
+                                                                      "type":  "main",
+                                                                      "index":  0
+                                                                  }
+                                                              ]
+                                                          ]
+                                             },
+                        "Get row(s) in sheet":  {
+                                                    "main":  [
+                                                                 [
+                                                                     {
+                                                                         "node":  "Code in JavaScript",
+                                                                         "type":  "main",
+                                                                         "index":  0
+                                                                     }
+                                                                 ]
+                                                             ]
+                                                },
+                        "Code in JavaScript":  {
+                                                   "main":  [
+                                                                [
+                                                                    {
+                                                                        "node":  "Send message",
+                                                                        "type":  "main",
+                                                                        "index":  0
+                                                                    }
+                                                                ]
+                                                            ]
+                                               }
+                    },
+    "active":  false,
+    "settings":  {
+                     "executionOrder":  "v1",
+                     "availableInMCP":  false
+                 },
+    "versionId":  "ebdb60df-606a-4685-ab15-86f8a6c9b4cc",
+    "meta":  {
+                 "instanceId":  "19cdbff816187c47f2c2f164215bc7433a1126dea430f9366c8b9599f28afba0"
+             },
+    "id":  "IDAd69ynfmImDXGWEgViZ",
+    "tags":  [
+
+             ]
+}

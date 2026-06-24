@@ -1,0 +1,216 @@
+﻿{
+    "name":  "Automated Compliance Deadline Reminders",
+    "nodes":  [
+                  {
+                      "parameters":  {
+                                         "content":  "Before building the workflow, you must prepare your data and secure your connections:\n\n    Credentials: Set up your Google Sheets API (via OAuth2 or Service Account) and configure your WhatsApp Business Cloud credentials inside n8n.\n    The Database: Create a master Google Sheet named \"Compliance Calendar\" with columns for: Client Name, Phone Number, Form Type (e.g., GSTR-3B), Due Date, and Status (e.g., Pending, Filed).",
+                                         "height":  208,
+                                         "width":  528
+                                     },
+                      "type":  "n8n-nodes-base.stickyNote",
+                      "typeVersion":  1,
+                      "position":  [
+                                       -672,
+                                       -288
+                                   ],
+                      "id":  "2a8555d4-9436-425e-92c5-900d85bd4157",
+                      "name":  "Sticky Note",
+                      "notes":  "Setup: Configure Google Sheets and WhatsApp credentials, then create a Compliance Calendar sheet."
+                  },
+                  {
+                      "parameters":  {
+                                         "rule":  {
+                                                      "interval":  [
+                                                                       {
+                                                                           "triggerAtHour":  9
+                                                                       }
+                                                                   ]
+                                                  }
+                                     },
+                      "type":  "n8n-nodes-base.scheduleTrigger",
+                      "typeVersion":  1.3,
+                      "position":  [
+                                       -528,
+                                       -16
+                                   ],
+                      "id":  "5929e760-8a90-49d8-b500-be473f80b79f",
+                      "name":  "Schedule Trigger",
+                      "notes":  "Runs daily at 9 AM to check for upcoming compliance deadlines.",
+                      "notesInFlow":  true
+                  },
+                  {
+                      "parameters":  {
+                                         "documentId":  {
+                                                            "__rl":  true,
+                                                            "mode":  "list",
+                                                            "value":  ""
+                                                        },
+                                         "sheetName":  {
+                                                           "__rl":  true,
+                                                           "mode":  "list",
+                                                           "value":  ""
+                                                       }
+                                     },
+                      "type":  "n8n-nodes-base.googleSheets",
+                      "typeVersion":  4.7,
+                      "position":  [
+                                       -320,
+                                       -16
+                                   ],
+                      "id":  "7ea19e5b-f239-4ad0-a8b5-44d556d8d730",
+                      "name":  "Get row(s) in sheet",
+                      "notesInFlow":  true,
+                      "notes":  "Pulls all pending entries from the Compliance Calendar sheet."
+                  },
+                  {
+                      "parameters":  {
+                                         "conditions":  {
+                                                            "options":  {
+                                                                            "caseSensitive":  true,
+                                                                            "leftValue":  "",
+                                                                            "typeValidation":  "strict",
+                                                                            "version":  3
+                                                                        },
+                                                            "conditions":  [
+                                                                               {
+                                                                                   "id":  "6d279de1-723a-4906-857f-b40060b4ca19",
+                                                                                   "leftValue":  "",
+                                                                                   "rightValue":  "",
+                                                                                   "operator":  {
+                                                                                                    "type":  "string",
+                                                                                                    "operation":  "equals",
+                                                                                                    "name":  "filter.operator.equals"
+                                                                                                }
+                                                                               }
+                                                                           ],
+                                                            "combinator":  "and"
+                                                        },
+                                         "options":  {
+
+                                                     }
+                                     },
+                      "type":  "n8n-nodes-base.if",
+                      "typeVersion":  2.3,
+                      "position":  [
+                                       -112,
+                                       -16
+                                   ],
+                      "id":  "320ac6a0-5ea7-498f-9c94-43ce253f59d5",
+                      "name":  "If",
+                      "notesInFlow":  true,
+                      "notes":  "Filters clients whose filing is due within the next 7 days."
+                  },
+                  {
+                      "parameters":  {
+                                         "options":  {
+
+                                                     }
+                                     },
+                      "type":  "n8n-nodes-base.splitInBatches",
+                      "typeVersion":  3,
+                      "position":  [
+                                       208,
+                                       -128
+                                   ],
+                      "id":  "36c01db6-9d30-49af-bac9-abf055133319",
+                      "name":  "Loop Over Items",
+                      "notes":  "Processes each matching client one at a time.",
+                      "notesInFlow":  true
+                  },
+                  {
+                      "parameters":  {
+                                         "operation":  "send",
+                                         "additionalFields":  {
+
+                                                              }
+                                     },
+                      "type":  "n8n-nodes-base.whatsApp",
+                      "typeVersion":  1.1,
+                      "position":  [
+                                       480,
+                                       -32
+                                   ],
+                      "id":  "42327f28-acf6-46ca-a97a-ff3afd5f9deb",
+                      "name":  "Send message",
+                      "webhookId":  "ebed9f7d-255b-4300-a06c-933a5abdb7c7",
+                      "notesInFlow":  true,
+                      "notes":  "Sends a WhatsApp reminder with the filing type and due date."
+                  }
+              ],
+    "pinData":  {
+
+                },
+    "connections":  {
+                        "Schedule Trigger":  {
+                                                 "main":  [
+                                                              [
+                                                                  {
+                                                                      "node":  "Get row(s) in sheet",
+                                                                      "type":  "main",
+                                                                      "index":  0
+                                                                  }
+                                                              ]
+                                                          ]
+                                             },
+                        "Get row(s) in sheet":  {
+                                                    "main":  [
+                                                                 [
+                                                                     {
+                                                                         "node":  "If",
+                                                                         "type":  "main",
+                                                                         "index":  0
+                                                                     }
+                                                                 ]
+                                                             ]
+                                                },
+                        "If":  {
+                                   "main":  [
+                                                [
+                                                    {
+                                                        "node":  "Loop Over Items",
+                                                        "type":  "main",
+                                                        "index":  0
+                                                    }
+                                                ]
+                                            ]
+                               },
+                        "Loop Over Items":  {
+                                                "main":  [
+                                                             [
+
+                                                             ],
+                                                             [
+                                                                 {
+                                                                     "node":  "Send message",
+                                                                     "type":  "main",
+                                                                     "index":  0
+                                                                 }
+                                                             ]
+                                                         ]
+                                            },
+                        "Send message":  {
+                                             "main":  [
+                                                          [
+                                                              {
+                                                                  "node":  "Loop Over Items",
+                                                                  "type":  "main",
+                                                                  "index":  0
+                                                              }
+                                                          ]
+                                                      ]
+                                         }
+                    },
+    "active":  false,
+    "settings":  {
+                     "executionOrder":  "v1",
+                     "availableInMCP":  false
+                 },
+    "versionId":  "bf97996f-80a4-4568-9dcc-d10ffab200fe",
+    "meta":  {
+                 "instanceId":  "19cdbff816187c47f2c2f164215bc7433a1126dea430f9366c8b9599f28afba0"
+             },
+    "id":  "OWqOnmU0R1QFSOzSrm0sq",
+    "tags":  [
+
+             ]
+}
