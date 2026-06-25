@@ -61,6 +61,21 @@ export function VerticalDetailCard({ vertical }: VerticalDetailCardProps) {
             "{vertical.pitchPath}"
           </p>
         </div>
+
+        {vertical.segments && vertical.segments.length > 0 && (
+          <div className="pt-4 border-t border-[var(--color-border-subtle)]">
+            <h4 className="font-semibold text-sm uppercase tracking-wider text-[var(--color-text-primary)] mb-3">
+              Key Segments
+            </h4>
+            <div className="flex flex-wrap gap-2">
+              {vertical.segments.map(segment => (
+                <span key={segment.id} className="px-3 py-1 bg-[var(--color-background-secondary)] border border-[var(--color-border-subtle)] rounded-full text-xs font-medium text-[var(--color-text-secondary)]">
+                  {segment.name}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

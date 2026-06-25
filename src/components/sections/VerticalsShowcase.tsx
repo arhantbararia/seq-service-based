@@ -24,17 +24,24 @@ export function VerticalsShowcase() {
           </FadeUp>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-0 border-t border-l border-[var(--color-border-subtle)]">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-0 border-t border-l border-[var(--color-border-subtle)]">
           {verticals.map((vertical, index) => (
             <FadeUp 
               key={vertical.id} 
-              delay={index * 0.05} 
-              className={index === 0 ? "md:col-span-2 lg:col-span-2 xl:col-span-2 flex h-full border-r border-b border-[var(--color-border-subtle)]" : "flex h-full border-r border-b border-[var(--color-border-subtle)]"}
+              delay={index * 0.1} 
+              className="flex h-full border-r border-b border-[var(--color-border-subtle)]"
             >
               <Link href={`/verticals#${vertical.id}`} className="block h-full w-full group hover:bg-[var(--color-surface-glass)] transition-colors p-8">
                 <div className="h-full flex flex-col justify-between">
                   <div>
-                    <div className="font-mono text-[10px] text-[var(--color-text-muted)] mb-2 tracking-widest uppercase">{vertical.id}</div>
+                    <div className="flex justify-between items-center mb-2">
+                      <div className="font-mono text-[10px] text-[var(--color-text-muted)] tracking-widest uppercase">{vertical.id}</div>
+                      {vertical.segments && vertical.segments.length > 0 && (
+                        <div className="font-mono text-[10px] text-[var(--color-text-primary)] tracking-widest uppercase bg-[var(--color-background-primary)] border border-[var(--color-border-subtle)] px-2 py-1 rounded-full">
+                          {vertical.segments.length} Segments
+                        </div>
+                      )}
+                    </div>
                     <h3 className="text-2xl font-serif mb-4 text-[var(--color-text-primary)]">
                       {vertical.name}
                     </h3>

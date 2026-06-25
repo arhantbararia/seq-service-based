@@ -11,6 +11,13 @@ export interface Service {
   icon: string;
 }
 
+export interface Segment {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+}
+
 export interface Vertical {
   id: string;
   name: string;
@@ -21,6 +28,7 @@ export interface Vertical {
   icp: string;
   keywords: string[];
   recommendedTiers: TierLevel[];
+  segments?: Segment[];
 }
 
 export interface WebsiteEntry {

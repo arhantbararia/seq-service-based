@@ -193,20 +193,6 @@ export const automations: AutomationEntry[] = [
 
   // ─── Legacy Entries ───────────────────────────────────────────────
   {
-    id: "auto-review-gen",
-    name: "Post-Service Review Generation",
-    description: "Triggers an automated review request via email 24 hours after a service is marked complete in your system, filtering out negative feedback to an internal dashboard.",
-    verticalId: "lifestyle-retail",
-    complexity: "Simple",
-    timeSavedHours: 20,
-    workflowJsonPath: "/workflows/lead-capture.json",
-    nodeSummary: {
-      total: 5,
-      triggers: ["Webhook"],
-      actions: ["Email Send", "Filter", "Airtable"],
-    },
-  },
-  {
     id: "auto-lab-report",
     name: "Automated Lab Report Delivery (Email)",
     description: "Watches for new PDF reports in a secure folder, matches them to patient records, and automatically emails the secure link to the patient.",

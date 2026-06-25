@@ -22,16 +22,6 @@ export const websites: WebsiteEntry[] = [
     techStack: ["Next.js", "Supabase", "Splitforms"],
   },
   {
-    id: "edtech-testing",
-    title: "Coaching Institute Testing Platform",
-    verticalId: "education",
-    tier: 4,
-    description: "Custom built online testing platform capable of handling high concurrency during exam seasons. Features KaTeX math rendering and real-time analytics.",
-    imageUrl: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=800&auto=format&fit=crop",
-    features: ["High Concurrency", "Math Rendering", "Real-time Analytics"],
-    techStack: ["Next.js", "Redis", "DigitalOcean Clusters"],
-  },
-  {
     id: "realestate-catalog",
     title: "Property Listing Aggregator",
     verticalId: "real-estate",
