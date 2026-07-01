@@ -34,7 +34,7 @@ export default function ContactPage() {
       <section className="py-12 bg-[var(--color-background-primary)]">
         <div className="container mx-auto px-4 md:px-6 max-w-6xl">
           <div className="grid lg:grid-cols-12 gap-12">
-            
+
             {/* Contact Form */}
             <div className="lg:col-span-7">
               <FadeUp delay={0.1}>
@@ -58,9 +58,9 @@ export default function ContactPage() {
                         <div className="grid md:grid-cols-2 gap-6">
                           <div className="space-y-2">
                             <label htmlFor="name" className="text-sm font-medium text-[var(--color-text-primary)]">Name</label>
-                            <input 
-                              type="text" 
-                              id="name" 
+                            <input
+                              type="text"
+                              id="name"
                               required
                               className="w-full bg-[var(--color-background-primary)] border border-[var(--color-border-subtle)] rounded-lg px-4 py-3 text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent-primary)]/50 transition-all"
                               placeholder="John Doe"
@@ -68,9 +68,9 @@ export default function ContactPage() {
                           </div>
                           <div className="space-y-2">
                             <label htmlFor="email" className="text-sm font-medium text-[var(--color-text-primary)]">Email</label>
-                            <input 
-                              type="email" 
-                              id="email" 
+                            <input
+                              type="email"
+                              id="email"
                               required
                               className="w-full bg-[var(--color-background-primary)] border border-[var(--color-border-subtle)] rounded-lg px-4 py-3 text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent-primary)]/50 transition-all"
                               placeholder="john@company.com"
@@ -80,7 +80,7 @@ export default function ContactPage() {
 
                         <div className="space-y-2">
                           <label htmlFor="industry" className="text-sm font-medium text-[var(--color-text-primary)]">Industry</label>
-                          <select 
+                          <select
                             id="industry"
                             required
                             className="w-full bg-[var(--color-background-primary)] border border-[var(--color-border-subtle)] rounded-lg px-4 py-3 text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent-primary)]/50 transition-all appearance-none"
@@ -95,8 +95,8 @@ export default function ContactPage() {
 
                         <div className="space-y-2">
                           <label htmlFor="message" className="text-sm font-medium text-[var(--color-text-primary)]">What is your biggest manual bottleneck?</label>
-                          <textarea 
-                            id="message" 
+                          <textarea
+                            id="message"
                             required
                             rows={4}
                             className="w-full bg-[var(--color-background-primary)] border border-[var(--color-border-subtle)] rounded-lg px-4 py-3 text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent-primary)]/50 transition-all resize-y"
@@ -119,18 +119,18 @@ export default function ContactPage() {
               <FadeUp delay={0.2}>
                 <div className="bg-[var(--color-surface-glass)] border border-[var(--color-border-subtle)] rounded-2xl p-8">
                   <h3 className="text-xl font-display font-semibold mb-6 text-[var(--color-text-primary)]">Direct Contact</h3>
-                  
+
                   <div className="space-y-6">
                     <div className="flex items-start">
                       <Mail className="w-6 h-6 text-[var(--color-accent-primary)] mr-4 shrink-0" />
                       <div>
                         <h4 className="font-medium text-[var(--color-text-primary)] mb-1">Email Us</h4>
-                        <a href="mailto:hello@sequels.in" className="text-[var(--color-text-secondary)] hover:text-[var(--color-accent-primary)] transition-colors">
-                          hello@sequels.in
+                        <a href="mailto:services@sequels.diy" className="text-[var(--color-text-secondary)] hover:text-[var(--color-accent-primary)] transition-colors">
+                          services@sequels.diy
                         </a>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-start">
                       <MapPin className="w-6 h-6 text-[var(--color-accent-primary)] mr-4 shrink-0" />
                       <div>
@@ -138,7 +138,7 @@ export default function ContactPage() {
                         <p className="text-[var(--color-text-secondary)]">India</p>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-start">
                       <Clock className="w-6 h-6 text-[var(--color-accent-primary)] mr-4 shrink-0" />
                       <div>

@@ -40,8 +40,8 @@ export function Footer() {
                 India
               </li>
               <li>
-                <a href="mailto:hello@sequels.in" className="text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] text-sm transition-colors">
-                  hello@sequels.in
+                <a href="mailto:services@sequels.diy" className="text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] text-sm transition-colors">
+                  services@sequels.diy
                 </a>
               </li>
               <li className="pt-2">
