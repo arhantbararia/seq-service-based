@@ -1,0 +1,125 @@
+{
+  "name": "The WhatsApp Instant Brochure/ Form Dispatch",
+  "nodes": [
+    {
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -400,
+        48
+      ],
+      "id": "ef551180-9532-4bb3-91fa-6555109650ec",
+      "name": "Webhook",
+      "webhookId": "89aa2304-ba78-4f03-b835-20b2d33d0aff",
+      "notesInFlow": true,
+      "notes": "Automated process."
+    },
+    {
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -192,
+        48
+      ],
+      "id": "fe79313b-99c0-4535-8f6c-478fe22f727f",
+      "name": "If",
+      "notesInFlow": true,
+      "notes": "Verifies the request contains brochure keywords."
+    },
+    {
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        112,
+        -128
+      ],
+      "id": "e94ec73c-45c2-457f-be00-f7f024cfa0a6",
+      "name": "Send message",
+      "webhookId": "6fe8d066-9ebe-434f-9b7d-a20fde0f9fa8",
+      "notesInFlow": true,
+      "onError": "continueErrorOutput",
+      "notes": "Instantly sends the therapy service brochure PDF to the patient."
+    },
+    {
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        400,
+        -48
+      ],
+      "id": "00d08e0c-96b1-4bbf-81cc-128a33a1f5f0",
+      "name": "Send email",
+      "webhookId": "6847b082-c1be-42a2-a123-9dc93b402e9e",
+      "notesInFlow": true,
+      "notes": "Alerts the clinic internally if the automated dispatch fails."
+    },
+    {
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        96,
+        144
+      ],
+      "id": "94e7bcde-a0cf-4aa8-902c-ae321c46aa97",
+      "name": "Send message1",
+      "webhookId": "d94b4701-8ef5-44f6-a0d9-2bb946229440",
+      "notesInFlow": true,
+      "notes": "Automated process."
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Send message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send message": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Send email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "bffe7b25-235c-478d-a5c4-a62cb7d8de8b",
+  "meta": {
+    "instanceId": "19cdbff816187c47f2c2f164215bc7433a1126dea430f9366c8b9599f28afba0"
+  },
+  "id": "ummxbJsHz4nanVbt",
+  "tier": 1
+}

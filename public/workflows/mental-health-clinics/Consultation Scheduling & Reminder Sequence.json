@@ -1,0 +1,248 @@
+{
+  "name": "Consultation Scheduling & Reminder Sequence",
+  "nodes": [
+    {
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -576,
+        80
+      ],
+      "id": "672df129-a6c8-434b-8e78-c1d9ac8b8ef5",
+      "name": "Webhook",
+      "webhookId": "a158a276-6dea-42f8-b6e5-9c03ae7d2a2e",
+      "notesInFlow": true,
+      "notes": "Captures new therapy session bookings from the website."
+    },
+    {
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -160,
+        192
+      ],
+      "id": "9d2c51a8-66ad-4f29-afa4-4cc2c126072e",
+      "name": "Append row in sheet",
+      "notesInFlow": true,
+      "notes": "Logs the session details into the scheduling tracker."
+    },
+    {
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        256,
+        48
+      ],
+      "id": "e8fea9c5-01f0-4602-ab7d-e97ff449aece",
+      "name": "Send message",
+      "webhookId": "284237b4-39b2-42fa-b9e3-e72e77581cd7",
+      "notesInFlow": true,
+      "notes": "Sends a booking confirmation to the patient via WhatsApp."
+    },
+    {
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -592,
+        416
+      ],
+      "id": "74d0b753-c257-4bee-b3f7-3dfb1aa1fbec",
+      "name": "Schedule Trigger",
+      "notes": "Checks daily for upcoming therapy sessions."
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -160,
+        -32
+      ],
+      "id": "380dfb48-399c-40f2-8d11-57df2a2ce050",
+      "name": "Create a row",
+      "notesInFlow": true,
+      "notes": "Automated process."
+    },
+    {
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -208,
+        384
+      ],
+      "id": "46ff84c8-1a85-43e9-9939-eb48f4332edb",
+      "name": "Get many rows",
+      "notesInFlow": true,
+      "notes": "Automated process."
+    },
+    {
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -192,
+        608
+      ],
+      "id": "90e9d654-f426-442b-8909-1786777d84bd",
+      "name": "Get row(s) in sheet",
+      "notesInFlow": true,
+      "notes": "Retrieves scheduled sessions for the next 24 hours."
+    },
+    {
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        128,
+        448
+      ],
+      "id": "c9555f45-00bf-442f-919d-63a3cd8780d6",
+      "name": "Loop Over Items",
+      "notes": "Processes each upcoming session individually."
+    },
+    {
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        480,
+        576
+      ],
+      "id": "ed3d9544-fd48-4645-aab7-82cb5cda081f",
+      "name": "Send message1",
+      "webhookId": "19265a2d-2d82-4c87-8b9a-a1b09866e348",
+      "notesInFlow": true,
+      "notes": "Sends a 24-hour reminder with clinic or video link details."
+    },
+    {
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        432,
+        304
+      ],
+      "id": "098e4b30-2286-4cff-952d-7a7415a0a3d8",
+      "name": "Send email",
+      "webhookId": "ab73cb00-a5c0-4d6f-99f6-de6f20a23154",
+      "notesInFlow": true,
+      "notes": "Notifies the therapist internally about the upcoming session."
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Create a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Send message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a row": {
+      "main": [
+        [
+          {
+            "node": "Send message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get many rows",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many rows": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Send email",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send message1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "d5f73818-9008-45cf-a8f5-9bd74d2754f5",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "19cdbff816187c47f2c2f164215bc7433a1126dea430f9366c8b9599f28afba0"
+  },
+  "id": "Bhi3KX37fWjcEb3HhD_8k",
+  "tier": 2
+}

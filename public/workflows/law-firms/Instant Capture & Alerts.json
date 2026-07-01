@@ -1,197 +1,125 @@
-﻿{
-    "name":  "Instant Capture \u0026 Alerts",
-    "nodes":  [
-                  {
-                      "parameters":  {
-                                         "httpMethod":  "POST",
-                                         "path":  "ca3f136d-803d-4e0a-9c5b-0374604a097d",
-                                         "options":  {
-
-                                                     }
-                                     },
-                      "type":  "n8n-nodes-base.webhook",
-                      "typeVersion":  2.1,
-                      "position":  [
-                                       -320,
-                                       -16
-                                   ],
-                      "id":  "c75ca359-1faa-4c21-b8ef-3f29df1d7ded",
-                      "name":  "Webhook",
-                      "webhookId":  "ca3f136d-803d-4e0a-9c5b-0374604a097d",
-                      "notes":  "Receives incoming lead submissions from the website contact form.",
-                      "notesInFlow":  true
-                  },
-                  {
-                      "parameters":  {
-                                         "assignments":  {
-                                                             "assignments":  [
-                                                                                 {
-                                                                                     "id":  "629419cb-3595-4251-b825-d3f72cfdcefd",
-                                                                                     "name":  "Clean_Name",
-                                                                                     "value":  "={{ $json.body.name }}",
-                                                                                     "type":  "string"
-                                                                                 },
-                                                                                 {
-                                                                                     "id":  "c4b33929-ce27-4b91-aa3b-1c2ef30a9304",
-                                                                                     "name":  "Clean_Phone",
-                                                                                     "value":  "=+91{{ $json.body.phone.replace(/\\D/g,\u0027\u0027) }}",
-                                                                                     "type":  "string"
-                                                                                 },
-                                                                                 {
-                                                                                     "id":  "2e937ac0-be92-4c31-8be2-dd1833025a9f",
-                                                                                     "name":  "Matter",
-                                                                                     "value":  "={{ $json.body.matter }}",
-                                                                                     "type":  "string"
-                                                                                 },
-                                                                                 {
-                                                                                     "id":  "13aa18a6-7a80-4623-82ed-96acfa4012a2",
-                                                                                     "name":  "Timestamp",
-                                                                                     "value":  "={{ $now }}",
-                                                                                     "type":  "string"
-                                                                                 }
-                                                                             ]
-                                                         },
-                                         "options":  {
-
-                                                     }
-                                     },
-                      "type":  "n8n-nodes-base.set",
-                      "typeVersion":  3.4,
-                      "position":  [
-                                       -112,
-                                       -16
-                                   ],
-                      "id":  "3ae9cd8a-0140-402c-97ba-6fbef7dd24e8",
-                      "name":  "Edit Fields",
-                      "notesInFlow":  true,
-                      "notes":  "Cleans and formats the lead data (name, phone, matter type)."
-                  },
-                  {
-                      "parameters":  {
-                                         "operation":  "appendOrUpdate",
-                                         "documentId":  {
-                                                            "__rl":  true,
-                                                            "mode":  "list",
-                                                            "value":  ""
-                                                        },
-                                         "sheetName":  {
-                                                           "__rl":  true,
-                                                           "mode":  "list",
-                                                           "value":  ""
-                                                       }
-                                     },
-                      "type":  "n8n-nodes-base.googleSheets",
-                      "typeVersion":  4.7,
-                      "position":  [
-                                       96,
-                                       -16
-                                   ],
-                      "id":  "d1406428-c5d7-4c2a-953b-4d6d099ad6c4",
-                      "name":  "Append or update row in sheet",
-                      "notesInFlow":  true,
-                      "notes":  "Logs the new lead into the master Google Sheet."
-                  },
-                  {
-                      "parameters":  {
-                                         "operation":  "send",
-                                         "textBody":  "=🚨 New Inquiry: {{ $(\u0027Edit Fields\u0027).item.json.Clean_Name }} 📱 Phone: {{ $(\u0027Edit Fields\u0027).item.json.Clean_Phone }} ⚖️ Matter: {{ $(\u0027Edit Fields\u0027).item.json.Matter }} Quick Reply: https://wa.me/{{ $(\u0027Edit Fields\u0027).item.json.Clean_Phone }}?text=Hi%20this%20is%20Advocate%20X...",
-                                         "additionalFields":  {
-
-                                                              }
-                                     },
-                      "type":  "n8n-nodes-base.whatsApp",
-                      "typeVersion":  1.1,
-                      "position":  [
-                                       288,
-                                       -16
-                                   ],
-                      "id":  "333ec4a7-da73-45e5-aac7-f56f4d5086f1",
-                      "name":  "Send message",
-                      "webhookId":  "0a7b6e80-cc30-4c8e-b268-aec959b7bcc3",
-                      "notesInFlow":  true,
-                      "notes":  "Alerts the Advocate on WhatsApp with the new lead details."
-                  },
-                  {
-                      "parameters":  {
-                                         "operation":  "send",
-                                         "textBody":  "={{ $(\u0027Edit Fields\u0027).item.json.Matter }}",
-                                         "additionalFields":  {
-
-                                                              }
-                                     },
-                      "type":  "n8n-nodes-base.whatsApp",
-                      "typeVersion":  1.1,
-                      "position":  [
-                                       496,
-                                       -16
-                                   ],
-                      "id":  "597cfd7d-cd02-48ce-a291-c950c68a8d49",
-                      "name":  "Send message1",
-                      "webhookId":  "7ed23072-8817-4b87-b42f-8e55a498048b",
-                      "notesInFlow":  true,
-                      "notes":  "Sends a confirmation message to the prospective client."
-                  }
-              ],
-    "pinData":  {
-
-                },
-    "connections":  {
-                        "Webhook":  {
-                                        "main":  [
-                                                     [
-                                                         {
-                                                             "node":  "Edit Fields",
-                                                             "type":  "main",
-                                                             "index":  0
-                                                         }
-                                                     ]
-                                                 ]
-                                    },
-                        "Edit Fields":  {
-                                            "main":  [
-                                                         [
-                                                             {
-                                                                 "node":  "Append or update row in sheet",
-                                                                 "type":  "main",
-                                                                 "index":  0
-                                                             }
-                                                         ]
-                                                     ]
-                                        },
-                        "Append or update row in sheet":  {
-                                                              "main":  [
-                                                                           [
-                                                                               {
-                                                                                   "node":  "Send message",
-                                                                                   "type":  "main",
-                                                                                   "index":  0
-                                                                               }
-                                                                           ]
-                                                                       ]
-                                                          },
-                        "Send message":  {
-                                             "main":  [
-                                                          [
-                                                              {
-                                                                  "node":  "Send message1",
-                                                                  "type":  "main",
-                                                                  "index":  0
-                                                              }
-                                                          ]
-                                                      ]
-                                         }
-                    },
-    "active":  false,
-    "settings":  {
-                     "executionOrder":  "v1",
-                     "availableInMCP":  false
-                 },
-    "versionId":  "7db858f1-9eaa-454e-bea6-5d4660f8156f",
-    "meta":  {
-                 "instanceId":  "19cdbff816187c47f2c2f164215bc7433a1126dea430f9366c8b9599f28afba0"
-             },
-    "id":  "kkSCrmwa1YBLJHf_IsCBh",
-    "tags":  [
-
-             ]
+{
+  "name": "Instant Capture & Alerts",
+  "nodes": [
+    {
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -320,
+        -16
+      ],
+      "id": "c75ca359-1faa-4c21-b8ef-3f29df1d7ded",
+      "name": "Webhook",
+      "webhookId": "ca3f136d-803d-4e0a-9c5b-0374604a097d",
+      "notes": "Captures new legal inquiries directly from the firm's website.",
+      "notesInFlow": true
+    },
+    {
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -112,
+        -16
+      ],
+      "id": "3ae9cd8a-0140-402c-97ba-6fbef7dd24e8",
+      "name": "Edit Fields",
+      "notesInFlow": true,
+      "notes": "Automated process."
+    },
+    {
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        96,
+        -16
+      ],
+      "id": "d1406428-c5d7-4c2a-953b-4d6d099ad6c4",
+      "name": "Append or update row in sheet",
+      "notesInFlow": true,
+      "notes": "Automated process."
+    },
+    {
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        288,
+        -16
+      ],
+      "id": "333ec4a7-da73-45e5-aac7-f56f4d5086f1",
+      "name": "Send message",
+      "webhookId": "0a7b6e80-cc30-4c8e-b268-aec959b7bcc3",
+      "notesInFlow": true,
+      "notes": "Instantly alerts the legal team internally on WhatsApp."
+    },
+    {
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        496,
+        -16
+      ],
+      "id": "597cfd7d-cd02-48ce-a291-c950c68a8d49",
+      "name": "Send message1",
+      "webhookId": "7ed23072-8817-4b87-b42f-8e55a498048b",
+      "notesInFlow": true,
+      "notes": "Automated process."
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append or update row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Send message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send message": {
+      "main": [
+        [
+          {
+            "node": "Send message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "7db858f1-9eaa-454e-bea6-5d4660f8156f",
+  "meta": {
+    "instanceId": "19cdbff816187c47f2c2f164215bc7433a1126dea430f9366c8b9599f28afba0"
+  },
+  "id": "kkSCrmwa1YBLJHf_IsCBh"
 }

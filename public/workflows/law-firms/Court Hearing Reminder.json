@@ -1,250 +1,135 @@
-﻿{
-    "name":  "Court Hearing Reminder",
-    "nodes":  [
-                  {
-                      "parameters":  {
-                                         "rule":  {
-                                                      "interval":  [
-                                                                       {
-                                                                           "triggerAtHour":  7
-                                                                       }
-                                                                   ]
-                                                  }
-                                     },
-                      "type":  "n8n-nodes-base.scheduleTrigger",
-                      "typeVersion":  1.3,
-                      "position":  [
-                                       -400,
-                                       -32
-                                   ],
-                      "id":  "0d7d66af-b8f9-4d03-9baa-4d130758bf1a",
-                      "name":  "Schedule Trigger",
-                      "notesInFlow":  true,
-                      "notes":  "Runs daily at 7 AM to scan for upcoming hearings."
-                  },
-                  {
-                      "parameters":  {
-                                         "documentId":  {
-                                                            "__rl":  true,
-                                                            "mode":  "list",
-                                                            "value":  ""
-                                                        },
-                                         "sheetName":  {
-                                                           "__rl":  true,
-                                                           "mode":  "list",
-                                                           "value":  ""
-                                                       }
-                                     },
-                      "type":  "n8n-nodes-base.googleSheets",
-                      "typeVersion":  4.7,
-                      "position":  [
-                                       -192,
-                                       -32
-                                   ],
-                      "id":  "542ced11-8c5a-4ab5-8287-c9f48bab82d3",
-                      "name":  "Get row(s) in sheet",
-                      "notesInFlow":  true,
-                      "notes":  "Pulls all active cases from the Master Case Tracker sheet."
-                  },
-                  {
-                      "parameters":  {
-                                         "conditions":  {
-                                                            "options":  {
-                                                                            "caseSensitive":  true,
-                                                                            "leftValue":  "",
-                                                                            "typeValidation":  "strict",
-                                                                            "version":  3
-                                                                        },
-                                                            "conditions":  [
-                                                                               {
-                                                                                   "id":  "c1ad2418-0ba3-4101-9818-9af5c51ab7e2",
-                                                                                   "leftValue":  "",
-                                                                                   "rightValue":  "",
-                                                                                   "operator":  {
-                                                                                                    "type":  "string",
-                                                                                                    "operation":  "equals",
-                                                                                                    "name":  "filter.operator.equals"
-                                                                                                }
-                                                                               }
-                                                                           ],
-                                                            "combinator":  "and"
-                                                        },
-                                         "options":  {
-
-                                                     }
-                                     },
-                      "type":  "n8n-nodes-base.if",
-                      "typeVersion":  2.3,
-                      "position":  [
-                                       16,
-                                       -32
-                                   ],
-                      "id":  "34948b6a-50d7-4d23-8fbf-cebf04a3acfd",
-                      "name":  "If",
-                      "notesInFlow":  true,
-                      "notes":  "Filters cases with a hearing date of today or tomorrow."
-                  },
-                  {
-                      "parameters":  {
-                                         "options":  {
-
-                                                     }
-                                     },
-                      "type":  "n8n-nodes-base.splitInBatches",
-                      "typeVersion":  3,
-                      "position":  [
-                                       336,
-                                       -128
-                                   ],
-                      "id":  "c1ca2dc5-6f9b-485a-aa6e-322af52fd517",
-                      "name":  "Loop Over Items",
-                      "notesInFlow":  true,
-                      "notes":  "Processes each matching case one at a time."
-                  },
-                  {
-                      "parameters":  {
-                                         "rules":  {
-                                                       "values":  [
-                                                                      {
-                                                                          "conditions":  {
-                                                                                             "options":  {
-                                                                                                             "caseSensitive":  true,
-                                                                                                             "leftValue":  "",
-                                                                                                             "typeValidation":  "strict",
-                                                                                                             "version":  3
-                                                                                                         },
-                                                                                             "conditions":  [
-                                                                                                                {
-                                                                                                                    "leftValue":  "recipient",
-                                                                                                                    "rightValue":  "Advocate",
-                                                                                                                    "operator":  {
-                                                                                                                                     "type":  "string",
-                                                                                                                                     "operation":  "equals"
-                                                                                                                                 },
-                                                                                                                    "id":  "c5285821-4134-4677-a6e4-000bbf388b29"
-                                                                                                                }
-                                                                                                            ],
-                                                                                             "combinator":  "and"
-                                                                                         }
-                                                                      },
-                                                                      {
-                                                                          "conditions":  {
-                                                                                             "options":  {
-                                                                                                             "caseSensitive":  true,
-                                                                                                             "leftValue":  "",
-                                                                                                             "typeValidation":  "strict",
-                                                                                                             "version":  3
-                                                                                                         },
-                                                                                             "conditions":  [
-                                                                                                                {
-                                                                                                                    "id":  "63d7a2b8-8208-4997-b140-5ece382f516a",
-                                                                                                                    "leftValue":  "recipient",
-                                                                                                                    "rightValue":  "Client",
-                                                                                                                    "operator":  {
-                                                                                                                                     "type":  "string",
-                                                                                                                                     "operation":  "equals",
-                                                                                                                                     "name":  "filter.operator.equals"
-                                                                                                                                 }
-                                                                                                                }
-                                                                                                            ],
-                                                                                             "combinator":  "and"
-                                                                                         }
-                                                                      }
-                                                                  ]
-                                                   },
-                                         "options":  {
-
-                                                     }
-                                     },
-                      "type":  "n8n-nodes-base.switch",
-                      "typeVersion":  3.4,
-                      "position":  [
-                                       544,
-                                       -80
-                                   ],
-                      "id":  "461fb05d-565a-4c24-bd57-861c46087148",
-                      "name":  "Switch",
-                      "notesInFlow":  true,
-                      "notes":  "Routes the reminder to either the Advocate or the Client."
-                  }
-              ],
-    "pinData":  {
-
-                },
-    "connections":  {
-                        "Schedule Trigger":  {
-                                                 "main":  [
-                                                              [
-                                                                  {
-                                                                      "node":  "Get row(s) in sheet",
-                                                                      "type":  "main",
-                                                                      "index":  0
-                                                                  }
-                                                              ]
-                                                          ]
-                                             },
-                        "Get row(s) in sheet":  {
-                                                    "main":  [
-                                                                 [
-                                                                     {
-                                                                         "node":  "If",
-                                                                         "type":  "main",
-                                                                         "index":  0
-                                                                     }
-                                                                 ]
-                                                             ]
-                                                },
-                        "If":  {
-                                   "main":  [
-                                                [
-                                                    {
-                                                        "node":  "Loop Over Items",
-                                                        "type":  "main",
-                                                        "index":  0
-                                                    }
-                                                ]
-                                            ]
-                               },
-                        "Loop Over Items":  {
-                                                "main":  [
-                                                             [
-
-                                                             ],
-                                                             [
-                                                                 {
-                                                                     "node":  "Switch",
-                                                                     "type":  "main",
-                                                                     "index":  0
-                                                                 }
-                                                             ]
-                                                         ]
-                                            },
-                        "Switch":  {
-                                       "main":  [
-                                                    [
-                                                        {
-                                                            "node":  "Loop Over Items",
-                                                            "type":  "main",
-                                                            "index":  0
-                                                        }
-                                                    ],
-                                                    [
-
-                                                    ]
-                                                ]
-                                   }
-                    },
-    "active":  false,
-    "settings":  {
-                     "executionOrder":  "v1",
-                     "availableInMCP":  false
-                 },
-    "versionId":  "0870fbb7-af24-407c-8a6c-5e0f39d602e9",
-    "meta":  {
-                 "instanceId":  "19cdbff816187c47f2c2f164215bc7433a1126dea430f9366c8b9599f28afba0"
-             },
-    "id":  "AmHvamHAXCTq0OfyDU49X",
-    "tags":  [
-
-             ]
+{
+  "name": "Court Hearing Reminder",
+  "nodes": [
+    {
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -400,
+        -32
+      ],
+      "id": "0d7d66af-b8f9-4d03-9baa-4d130758bf1a",
+      "name": "Schedule Trigger",
+      "notesInFlow": true,
+      "notes": "Checks daily for upcoming court hearings."
+    },
+    {
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -192,
+        -32
+      ],
+      "id": "542ced11-8c5a-4ab5-8287-c9f48bab82d3",
+      "name": "Get row(s) in sheet",
+      "notesInFlow": true,
+      "notes": "Retrieves scheduled hearings for the next 48 hours."
+    },
+    {
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        16,
+        -32
+      ],
+      "id": "34948b6a-50d7-4d23-8fbf-cebf04a3acfd",
+      "name": "If",
+      "notesInFlow": true,
+      "notes": "Automated process."
+    },
+    {
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        336,
+        -128
+      ],
+      "id": "c1ca2dc5-6f9b-485a-aa6e-322af52fd517",
+      "name": "Loop Over Items",
+      "notesInFlow": true,
+      "notes": "Processes each upcoming hearing individually."
+    },
+    {
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        544,
+        -80
+      ],
+      "id": "461fb05d-565a-4c24-bd57-861c46087148",
+      "name": "Switch",
+      "notesInFlow": true,
+      "notes": "Automated process."
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "0870fbb7-af24-407c-8a6c-5e0f39d602e9",
+  "meta": {
+    "instanceId": "19cdbff816187c47f2c2f164215bc7433a1126dea430f9366c8b9599f28afba0"
+  },
+  "id": "AmHvamHAXCTq0OfyDU49X"
 }

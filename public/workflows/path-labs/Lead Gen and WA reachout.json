@@ -1,160 +1,101 @@
-﻿{
-    "name":  "Lead Gen and WA reachout",
-    "nodes":  [
-                  {
-                      "parameters":  {
-                                         "httpMethod":  "POST",
-                                         "path":  "9c22fb3f-64a9-4cb2-9e6e-5b887b34ade0",
-                                         "options":  {
-
-                                                     }
-                                     },
-                      "type":  "n8n-nodes-base.webhook",
-                      "typeVersion":  2.1,
-                      "position":  [
-                                       -496,
-                                       16
-                                   ],
-                      "id":  "5748c7de-7371-4f90-85ac-7aacd80ed7a4",
-                      "name":  "Webhook",
-                      "webhookId":  "9c22fb3f-64a9-4cb2-9e6e-5b887b34ade0",
-                      "notes":  "Receives new patient inquiries from the website form.",
-                      "notesInFlow":  true
-                  },
-                  {
-                      "parameters":  {
-                                         "assignments":  {
-                                                             "assignments":  [
-                                                                                 {
-                                                                                     "id":  "041b29eb-6edf-4bad-8788-055084918dd6",
-                                                                                     "name":  "Clean_Name",
-                                                                                     "value":  "={{ $json.body.name.trim() }}",
-                                                                                     "type":  "string"
-                                                                                 },
-                                                                                 {
-                                                                                     "id":  "0a5804b4-20b9-4e3d-bb24-10f91d3eb526",
-                                                                                     "name":  "Clean_Phone",
-                                                                                     "value":  "=+91{{ $json.body.phone.replace(/\\D/g,\u0027\u0027) }}",
-                                                                                     "type":  "string"
-                                                                                 },
-                                                                                 {
-                                                                                     "id":  "663a5fb2-433f-4434-bcdc-dd313d55b7be",
-                                                                                     "name":  "Requested_Test",
-                                                                                     "value":  "={{ $json.body.test_scan }}",
-                                                                                     "type":  "string"
-                                                                                 }
-                                                                             ]
-                                                         },
-                                         "options":  {
-
-                                                     }
-                                     },
-                      "type":  "n8n-nodes-base.set",
-                      "typeVersion":  3.4,
-                      "position":  [
-                                       -256,
-                                       32
-                                   ],
-                      "id":  "cc7525ac-5646-4605-86c5-1ff659faf36e",
-                      "name":  "Edit Fields",
-                      "notes":  "Cleans and formats the patient data (name, phone, test type).",
-                      "notesInFlow":  true
-                  },
-                  {
-                      "parameters":  {
-                                         "operation":  "appendOrUpdate",
-                                         "documentId":  {
-                                                            "__rl":  true,
-                                                            "mode":  "list",
-                                                            "value":  ""
-                                                        },
-                                         "sheetName":  {
-                                                           "__rl":  true,
-                                                           "mode":  "list",
-                                                           "value":  ""
-                                                       }
-                                     },
-                      "type":  "n8n-nodes-base.googleSheets",
-                      "typeVersion":  4.7,
-                      "position":  [
-                                       -32,
-                                       -16
-                                   ],
-                      "id":  "13fa65c8-00aa-4d5b-a73e-59e001f554cd",
-                      "name":  "Append or update row in sheet",
-                      "notes":  "Logs the new inquiry into the master patient sheet.",
-                      "notesInFlow":  true
-                  },
-                  {
-                      "parameters":  {
-                                         "operation":  "send",
-                                         "textBody":  "=🆕 New inquiry: {{ $(\u0027Edit Fields\u0027).item.json.Clean_Name }}, {{ $(\u0027Edit Fields\u0027).item.json.Clean_Phone }}, wants {{ $(\u0027Edit Fields\u0027).item.json.Requested_Test }}.",
-                                         "additionalFields":  {
-
-                                                              }
-                                     },
-                      "type":  "n8n-nodes-base.whatsApp",
-                      "typeVersion":  1.1,
-                      "position":  [
-                                       224,
-                                       80
-                                   ],
-                      "id":  "d44ec5ee-34a4-44b2-bbd4-b3a48012ee5f",
-                      "name":  "Send message",
-                      "webhookId":  "8957162d-249a-4d18-9eea-4d13d76c4919",
-                      "notes":  "Sends a WhatsApp notification to the lab with inquiry details.",
-                      "notesInFlow":  true
-                  }
-              ],
-    "pinData":  {
-
-                },
-    "connections":  {
-                        "Webhook":  {
-                                        "main":  [
-                                                     [
-                                                         {
-                                                             "node":  "Edit Fields",
-                                                             "type":  "main",
-                                                             "index":  0
-                                                         }
-                                                     ]
-                                                 ]
-                                    },
-                        "Edit Fields":  {
-                                            "main":  [
-                                                         [
-                                                             {
-                                                                 "node":  "Append or update row in sheet",
-                                                                 "type":  "main",
-                                                                 "index":  0
-                                                             }
-                                                         ]
-                                                     ]
-                                        },
-                        "Append or update row in sheet":  {
-                                                              "main":  [
-                                                                           [
-                                                                               {
-                                                                                   "node":  "Send message",
-                                                                                   "type":  "main",
-                                                                                   "index":  0
-                                                                               }
-                                                                           ]
-                                                                       ]
-                                                          }
-                    },
-    "active":  false,
-    "settings":  {
-                     "executionOrder":  "v1",
-                     "availableInMCP":  false
-                 },
-    "versionId":  "c8d7e4cc-0b1c-4f43-84e1-1f07abb3b994",
-    "meta":  {
-                 "instanceId":  "19cdbff816187c47f2c2f164215bc7433a1126dea430f9366c8b9599f28afba0"
-             },
-    "id":  "onGZDr5Vld8657BmFiE7C",
-    "tags":  [
-
-             ]
+{
+  "name": "Lead Gen and WA reachout",
+  "nodes": [
+    {
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -496,
+        16
+      ],
+      "id": "5748c7de-7371-4f90-85ac-7aacd80ed7a4",
+      "name": "Webhook",
+      "webhookId": "9c22fb3f-64a9-4cb2-9e6e-5b887b34ade0",
+      "notes": "Receives new patient test inquiries from the website form.",
+      "notesInFlow": true
+    },
+    {
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -256,
+        32
+      ],
+      "id": "cc7525ac-5646-4605-86c5-1ff659faf36e",
+      "name": "Edit Fields",
+      "notes": "Formats the patient data and test type cleanly.",
+      "notesInFlow": true
+    },
+    {
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -32,
+        -16
+      ],
+      "id": "13fa65c8-00aa-4d5b-a73e-59e001f554cd",
+      "name": "Append or update row in sheet",
+      "notes": "Logs the new inquiry into the master patient tracker.",
+      "notesInFlow": true
+    },
+    {
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        224,
+        80
+      ],
+      "id": "d44ec5ee-34a4-44b2-bbd4-b3a48012ee5f",
+      "name": "Send message",
+      "webhookId": "8957162d-249a-4d18-9eea-4d13d76c4919",
+      "notes": "Sends an internal WhatsApp notification to the lab staff.",
+      "notesInFlow": true
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append or update row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Send message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "c8d7e4cc-0b1c-4f43-84e1-1f07abb3b994",
+  "meta": {
+    "instanceId": "19cdbff816187c47f2c2f164215bc7433a1126dea430f9366c8b9599f28afba0"
+  },
+  "id": "onGZDr5Vld8657BmFiE7C"
 }

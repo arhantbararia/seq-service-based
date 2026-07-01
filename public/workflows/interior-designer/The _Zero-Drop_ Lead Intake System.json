@@ -1,0 +1,167 @@
+{
+  "name": "The \"Zero-Drop\" Lead Intake System",
+  "nodes": [
+    {
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -400,
+        0
+      ],
+      "id": "62408433-c802-47e0-9fa9-16695b07da48",
+      "name": "Webhook",
+      "webhookId": "615efebf-633e-45f2-a124-3324fd69911a",
+      "notesInFlow": true,
+      "notes": "Captures new lead inquiries from the website form."
+    },
+    {
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -192,
+        0
+      ],
+      "id": "36426ded-16ad-491b-9cb0-6a7ac9fdb140",
+      "name": "Append row in sheet",
+      "notesInFlow": true,
+      "notes": "Logs the new lead into the master tracker."
+    },
+    {
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        16,
+        0
+      ],
+      "id": "f0d764be-93a3-47b5-a45f-a4e924bcc1ab",
+      "name": "Send message",
+      "webhookId": "5af4d4be-0b29-41b1-b684-acc6f95fa6f3",
+      "notesInFlow": true,
+      "onError": "continueErrorOutput",
+      "notes": "Alerts the design team internally about the new lead."
+    },
+    {
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        208,
+        -176
+      ],
+      "id": "37d22dda-5cca-4f9d-9fab-ec7b7018da63",
+      "name": "Send message1",
+      "webhookId": "4425ac3d-dda6-4dcc-86bf-1662dffed085",
+      "notesInFlow": true,
+      "onError": "continueErrorOutput",
+      "notes": "Sends an instant welcome message to the prospect."
+    },
+    {
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        448,
+        -48
+      ],
+      "id": "0a453dde-ebc6-472e-9574-4d2478fb59fd",
+      "name": "Send email",
+      "webhookId": "41c922c7-42f1-464d-b8ec-6d98376699a0",
+      "notes": "Automated process."
+    },
+    {
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        256,
+        144
+      ],
+      "id": "3b19aa3a-fad3-4b48-a31e-5eb4f65dcc6e",
+      "name": "Send email1",
+      "webhookId": "c238fc38-267d-4fc1-9861-2e5ed046efaf",
+      "notes": "Alerts the team via email if the WhatsApp welcome fails."
+    },
+    {
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        416,
+        -304
+      ],
+      "id": "d31b9306-c3e1-41da-943e-4b0ccb6e791d",
+      "name": "Send email2",
+      "webhookId": "1f506c3c-5705-4c54-9e0d-58a2769c2707",
+      "notesInFlow": true,
+      "notes": "Confirms internally that the lead was successfully onboarded."
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Send message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send message": {
+      "main": [
+        [
+          {
+            "node": "Send message1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send email1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send message1": {
+      "main": [
+        [
+          {
+            "node": "Send email2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "5e1b82fc-d076-4fef-ba20-409290fd3bce",
+  "meta": {
+    "instanceId": "19cdbff816187c47f2c2f164215bc7433a1126dea430f9366c8b9599f28afba0"
+  },
+  "id": "7msweM4ddMr4PMd0",
+  "tier": 1
+}

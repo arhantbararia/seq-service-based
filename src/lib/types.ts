@@ -35,9 +35,11 @@ export interface WebsiteEntry {
   id: string;
   title: string;
   verticalId: string;
+  segmentId?: string;
   tier: TierLevel;
   description: string;
   imageUrl: string;
+  url?: string;
   features: string[];
   techStack: string[];
 }
@@ -47,6 +49,8 @@ export interface AutomationEntry {
   name: string;
   description: string;
   verticalId: string | "cross-vertical";
+  segmentId?: string;
+  tier?: number;
   complexity: "Simple" | "Medium" | "Complex";
   timeSavedHours: number;
   workflowJsonPath: string;

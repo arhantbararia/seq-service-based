@@ -1,12 +1,17 @@
 import { Handle, Position } from "@xyflow/react";
-import { Layers, Webhook, Database, Mail, GitBranch, ArrowRightLeft } from "lucide-react";
+import { Layers, Webhook, Database, Mail, GitBranch, ArrowRightLeft, MessageCircle, Clock, StickyNote, Shuffle } from "lucide-react";
 
 const getIconForType = (type: string) => {
+  if (!type) return <Layers className="w-4 h-4 text-slate-400" />;
   if (type.includes("webhook")) return <Webhook className="w-4 h-4 text-pink-400" />;
-  if (type.includes("googleSheets")) return <Database className="w-4 h-4 text-emerald-400" />;
-  if (type.includes("email")) return <Mail className="w-4 h-4 text-sky-400" />;
-  if (type.includes("if")) return <GitBranch className="w-4 h-4 text-amber-400" />;
-  if (type.includes("set") || type.includes("transform")) return <ArrowRightLeft className="w-4 h-4 text-violet-400" />;
+  if (type.includes("googleSheets") || type.includes("postgres") || type.includes("supabase")) return <Database className="w-4 h-4 text-emerald-400" />;
+  if (type.includes("email") || type.includes("gmail") || type.includes("smtp")) return <Mail className="w-4 h-4 text-sky-400" />;
+  if (type.includes("if") || type.includes("filter")) return <GitBranch className="w-4 h-4 text-amber-400" />;
+  if (type.includes("set") || type.includes("transform") || type.includes("code")) return <ArrowRightLeft className="w-4 h-4 text-violet-400" />;
+  if (type.includes("whatsapp") || type.includes("telegram") || type.includes("slack")) return <MessageCircle className="w-4 h-4 text-green-500" />;
+  if (type.includes("schedule") || type.includes("cron")) return <Clock className="w-4 h-4 text-blue-400" />;
+  if (type.includes("stickyNote")) return <StickyNote className="w-4 h-4 text-yellow-500" />;
+  if (type.includes("switch") || type.includes("merge")) return <Shuffle className="w-4 h-4 text-orange-400" />;
   return <Layers className="w-4 h-4 text-slate-400" />;
 };
 
@@ -26,7 +31,7 @@ export function N8nNode({ data }: { data: any }) {
       
       {data.notes && (
         <div className="p-3 bg-[var(--color-background-primary)]/50 rounded-b-lg">
-          <p className="text-xs text-[var(--color-text-secondary)] italic leading-relaxed">
+          <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed font-medium">
             {data.notes}
           </p>
         </div>

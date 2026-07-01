@@ -1,0 +1,122 @@
+{
+  "name": "Aggregator Lead Synchronization",
+  "nodes": [
+    {
+      "type": "n8n-nodes-base.emailReadImap",
+      "typeVersion": 2.1,
+      "position": [
+        -416,
+        -32
+      ],
+      "id": "7d1d2741-66ed-422a-b1dc-25870254909b",
+      "name": "Email Trigger (IMAP)",
+      "notes": "Monitors inbox for new visa leads from aggregators."
+    },
+    {
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -112,
+        -48
+      ],
+      "id": "48fdbe3f-a4f0-4850-b9d8-d8f363bc1f2e",
+      "name": "Code in Python (Native)",
+      "notesInFlow": true,
+      "notes": "Extracts the applicant's name, phone, and visa type."
+    },
+    {
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        272,
+        64
+      ],
+      "id": "068c6e7d-0d9d-4af5-9603-024b05a1b03f",
+      "name": "Append row in sheet",
+      "notesInFlow": true,
+      "notes": "Logs the visa lead into the central database."
+    },
+    {
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -416,
+        176
+      ],
+      "id": "0c239b6f-8bde-47c7-bb6b-2a7000d7db8d",
+      "name": "Webhook",
+      "webhookId": "71b5f05c-4430-43d1-bb71-0ed8f256ed73",
+      "notes": "Captures direct visa lead submissions instantly."
+    },
+    {
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -64,
+        160
+      ],
+      "id": "819d70bd-67ee-41df-a1db-59fe81c5816e",
+      "name": "Edit Fields",
+      "notesInFlow": true,
+      "notes": "Formats the extracted applicant details for logging."
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Email Trigger (IMAP)": {
+      "main": [
+        [
+          {
+            "node": "Code in Python (Native)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in Python (Native)": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "edb8bdf3-609e-4c4e-a3a5-cf134ab7b4b3",
+  "meta": {
+    "instanceId": "19cdbff816187c47f2c2f164215bc7433a1126dea430f9366c8b9599f28afba0"
+  },
+  "id": "2YP1wzQao7rm3vRjnfFDM",
+  "tier": 1
+}

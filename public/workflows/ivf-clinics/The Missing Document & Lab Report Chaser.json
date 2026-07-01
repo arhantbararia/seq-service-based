@@ -1,0 +1,111 @@
+{
+  "name": "The Missing Document & Lab Report Chaser",
+  "nodes": [
+    {
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -400,
+        96
+      ],
+      "id": "90310733-e690-4d68-93c9-5bbf831c926d",
+      "name": "Schedule Trigger",
+      "notes": "Checks daily for pending patient lab reports."
+    },
+    {
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -160,
+        96
+      ],
+      "id": "582e8f87-89b2-4ab3-af30-fa9a8e3dbac6",
+      "name": "Get row(s) in sheet",
+      "notesInFlow": true,
+      "notes": "Retrieves patients with pending document statuses."
+    },
+    {
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        80,
+        64
+      ],
+      "id": "9abf0354-d7af-40be-b4c8-475e56ee06c2",
+      "name": "Loop Over Items",
+      "notes": "Processes each pending patient individually."
+    },
+    {
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        320,
+        128
+      ],
+      "id": "5ed6e2ef-7a22-46dd-bc1a-bec19106482a",
+      "name": "Send message",
+      "webhookId": "f6f86d71-8649-4d17-a37e-e0d41e733132",
+      "notesInFlow": true,
+      "notes": "Sends a gentle WhatsApp reminder to upload the pending lab report."
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Send message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send message": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "45a36172-117c-447f-aa9d-86a05202a890",
+  "meta": {
+    "instanceId": "19cdbff816187c47f2c2f164215bc7433a1126dea430f9366c8b9599f28afba0"
+  },
+  "id": "QZ-Y5dUJkt6Kv3VGTs5zf",
+  "tier": 2
+}

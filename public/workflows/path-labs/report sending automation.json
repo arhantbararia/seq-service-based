@@ -1,189 +1,100 @@
-﻿{
-    "name":  "report sending automation",
-    "nodes":  [
-                  {
-                      "parameters":  {
-                                         "pollTimes":  {
-                                                           "item":  [
-                                                                        {
-                                                                            "mode":  "everyMinute"
-                                                                        }
-                                                                    ]
-                                                       },
-                                         "documentId":  {
-                                                            "__rl":  true,
-                                                            "mode":  "list",
-                                                            "value":  ""
-                                                        },
-                                         "sheetName":  {
-                                                           "__rl":  true,
-                                                           "mode":  "list",
-                                                           "value":  ""
-                                                       },
-                                         "event":  "rowUpdate",
-                                         "options":  {
-
-                                                     }
-                                     },
-                      "type":  "n8n-nodes-base.googleSheetsTrigger",
-                      "typeVersion":  1,
-                      "position":  [
-                                       -352,
-                                       -48
-                                   ],
-                      "id":  "8fb17167-ba59-42ce-8041-060714c13193",
-                      "name":  "Google Sheets Trigger",
-                      "notes":  "Fires when a row in the results sheet is updated.",
-                      "notesInFlow":  true
-                  },
-                  {
-                      "parameters":  {
-                                         "conditions":  {
-                                                            "options":  {
-                                                                            "caseSensitive":  true,
-                                                                            "leftValue":  "",
-                                                                            "typeValidation":  "strict",
-                                                                            "version":  3
-                                                                        },
-                                                            "conditions":  [
-                                                                               {
-                                                                                   "id":  "f6c179cb-8c3f-404a-abae-3165880fba9f",
-                                                                                   "leftValue":  "={{ $json.Status }}",
-                                                                                   "rightValue":  "Report Ready",
-                                                                                   "operator":  {
-                                                                                                    "type":  "string",
-                                                                                                    "operation":  "equals",
-                                                                                                    "name":  "filter.operator.equals"
-                                                                                                }
-                                                                               }
-                                                                           ],
-                                                            "combinator":  "and"
-                                                        },
-                                         "options":  {
-
-                                                     }
-                                     },
-                      "type":  "n8n-nodes-base.if",
-                      "typeVersion":  2.3,
-                      "position":  [
-                                       -144,
-                                       -48
-                                   ],
-                      "id":  "b7f6d7e2-1439-499e-afbc-9eee580eb9a5",
-                      "name":  "If",
-                      "notes":  "Checks if the report status was changed to Report Ready.",
-                      "notesInFlow":  true
-                  },
-                  {
-                      "parameters":  {
-                                         "assignments":  {
-                                                             "assignments":  [
-                                                                                 {
-                                                                                     "id":  "f4714e88-2dc3-46f6-aa2b-6c2410010e9e",
-                                                                                     "name":  "Patient_Name",
-                                                                                     "value":  "={{ $json.Name }}",
-                                                                                     "type":  "string"
-                                                                                 },
-                                                                                 {
-                                                                                     "id":  "ab91ebd8-8474-45e9-9345-2c9eeaa7a5c1",
-                                                                                     "name":  "Patient_Phone",
-                                                                                     "value":  "=+91{{ $json.Phone.toString().replace(/\\D/g,\u0027\u0027) }}",
-                                                                                     "type":  "string"
-                                                                                 },
-                                                                                 {
-                                                                                     "id":  "b9bb33c6-3d70-4ed6-96ca-34fae6bd765e",
-                                                                                     "name":  "Test_Name",
-                                                                                     "value":  "={{ $json.Test }}",
-                                                                                     "type":  "string"
-                                                                                 }
-                                                                             ]
-                                                         },
-                                         "options":  {
-
-                                                     }
-                                     },
-                      "type":  "n8n-nodes-base.set",
-                      "typeVersion":  3.4,
-                      "position":  [
-                                       64,
-                                       -144
-                                   ],
-                      "id":  "5c67b0fd-5104-457c-8ec9-59827a7a2be0",
-                      "name":  "Edit Fields",
-                      "notes":  "Formats the patient name, phone, and test name for the message.",
-                      "notesInFlow":  true
-                  },
-                  {
-                      "parameters":  {
-                                         "operation":  "send",
-                                         "recipientPhoneNumber":  "={{ $json.Patient_Phone }}",
-                                         "textBody":  "=Hi {{ $(\u0027Edit Fields\u0027).item.json.Patient_Name }}, your {{ $(\u0027Edit Fields\u0027).item.json.Test_Name }} report is ready! Reply here to get a digital copy or visit us to collect it.",
-                                         "additionalFields":  {
-
-                                                              }
-                                     },
-                      "type":  "n8n-nodes-base.whatsApp",
-                      "typeVersion":  1.1,
-                      "position":  [
-                                       272,
-                                       -144
-                                   ],
-                      "id":  "c4fd77b4-495e-4641-a901-f31b0e9eeeb1",
-                      "name":  "Send message",
-                      "webhookId":  "f2383d5a-0529-4818-9f8e-780b8584b4e2",
-                      "notes":  "Sends the patient a WhatsApp message that their report is ready.",
-                      "notesInFlow":  true
-                  }
-              ],
-    "pinData":  {
-
-                },
-    "connections":  {
-                        "Google Sheets Trigger":  {
-                                                      "main":  [
-                                                                   [
-                                                                       {
-                                                                           "node":  "If",
-                                                                           "type":  "main",
-                                                                           "index":  0
-                                                                       }
-                                                                   ]
-                                                               ]
-                                                  },
-                        "If":  {
-                                   "main":  [
-                                                [
-                                                    {
-                                                        "node":  "Edit Fields",
-                                                        "type":  "main",
-                                                        "index":  0
-                                                    }
-                                                ]
-                                            ]
-                               },
-                        "Edit Fields":  {
-                                            "main":  [
-                                                         [
-                                                             {
-                                                                 "node":  "Send message",
-                                                                 "type":  "main",
-                                                                 "index":  0
-                                                             }
-                                                         ]
-                                                     ]
-                                        }
-                    },
-    "active":  false,
-    "settings":  {
-                     "executionOrder":  "v1",
-                     "availableInMCP":  false
-                 },
-    "versionId":  "1a422206-bfd4-43a8-99b2-fe6b68b2297c",
-    "meta":  {
-                 "instanceId":  "19cdbff816187c47f2c2f164215bc7433a1126dea430f9366c8b9599f28afba0"
-             },
-    "id":  "AATgnILzspMNyorR9wmIG",
-    "tags":  [
-
-             ]
+{
+  "name": "report sending automation",
+  "nodes": [
+    {
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        -352,
+        -48
+      ],
+      "id": "8fb17167-ba59-42ce-8041-060714c13193",
+      "name": "Google Sheets Trigger",
+      "notes": "Triggers when a row in the test results tracker is updated.",
+      "notesInFlow": true
+    },
+    {
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -144,
+        -48
+      ],
+      "id": "b7f6d7e2-1439-499e-afbc-9eee580eb9a5",
+      "name": "If",
+      "notes": "Checks if the test report status is marked as 'Ready'.",
+      "notesInFlow": true
+    },
+    {
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        64,
+        -144
+      ],
+      "id": "5c67b0fd-5104-457c-8ec9-59827a7a2be0",
+      "name": "Edit Fields",
+      "notes": "Formats the patient name and test details for the message.",
+      "notesInFlow": true
+    },
+    {
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        272,
+        -144
+      ],
+      "id": "c4fd77b4-495e-4641-a901-f31b0e9eeeb1",
+      "name": "Send message",
+      "webhookId": "f2383d5a-0529-4818-9f8e-780b8584b4e2",
+      "notes": "Sends a WhatsApp message notifying the patient their report is ready.",
+      "notesInFlow": true
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Sheets Trigger": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Send message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "1a422206-bfd4-43a8-99b2-fe6b68b2297c",
+  "meta": {
+    "instanceId": "19cdbff816187c47f2c2f164215bc7433a1126dea430f9366c8b9599f28afba0"
+  },
+  "id": "AATgnILzspMNyorR9wmIG"
 }

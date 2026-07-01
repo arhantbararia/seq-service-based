@@ -1,20 +1,13 @@
 "use client";
 
-import { useState } from "react";
-import { SectionHeading } from "@/components/ui/SectionHeading";
 import { FadeUp } from "@/components/animations/FadeUp";
-import { FilterPill } from "@/components/ui/FilterPill";
+import { VerticalSectionHeader } from "@/components/sections/VerticalSectionHeader";
 import { CTABanner } from "@/components/sections/CTABanner";
 import { WebsiteShowcaseCard } from "@/components/sections/WebsiteShowcaseCard";
 import { websites } from "@/data/websites";
 import { verticals } from "@/data/verticals";
 
 export default function WebsitesCatalogue() {
-  const [activeVertical, setActiveVertical] = useState<string>("all");
-
-  const filteredWebsites = activeVertical === "all" 
-    ? websites 
-    : websites.filter(w => w.verticalId === activeVertical);
 
   return (
     <>
@@ -31,41 +24,38 @@ export default function WebsitesCatalogue() {
         </div>
       </section>
 
-      <section className="py-12 bg-[var(--color-background-primary)] min-h-[50vh]">
-        <div className="container mx-auto px-4 md:px-6">
-          <FadeUp delay={0.1}>
-            <div className="flex flex-wrap items-center justify-center gap-3 mb-12">
-              <FilterPill 
-                active={activeVertical === "all"} 
-                onClick={() => setActiveVertical("all")}
-              >
-                All Industries
-              </FilterPill>
-              {verticals.map(vertical => (
-                <FilterPill 
-                  key={vertical.id} 
-                  active={activeVertical === vertical.id}
-                  onClick={() => setActiveVertical(vertical.id)}
-                >
-                  {vertical.name}
-                </FilterPill>
-              ))}
-            </div>
-          </FadeUp>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredWebsites.map((website, i) => (
-              <FadeUp key={website.id} delay={0.1 * i} className="h-full">
-                <WebsiteShowcaseCard website={website} />
-              </FadeUp>
-            ))}
+      <section className="py-12 pb-24 bg-[var(--color-background-primary)] min-h-[50vh]">
+        <div className="container mx-auto px-4 md:px-6 max-w-7xl">
+          {verticals.map((vertical, index) => {
+            const verticalWebsites = websites.filter(w => w.verticalId === vertical.id);
             
-            {filteredWebsites.length === 0 && (
-              <div className="col-span-full py-20 text-center">
-                <p className="text-[var(--color-text-secondary)] text-lg">No examples found for this industry yet. We can build the first one.</p>
+            return (
+              <div key={vertical.id} className="mb-24 last:mb-0">
+                <FadeUp delay={0.1}>
+                  <VerticalSectionHeader 
+                    name={vertical.name} 
+                    icp={vertical.icp} 
+                    icon={vertical.icon} 
+                  />
+                </FadeUp>
+
+                {verticalWebsites.length > 0 ? (
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {verticalWebsites.map((website, i) => (
+                      <FadeUp key={website.id} delay={0.1 * i} className="h-full">
+                        <WebsiteShowcaseCard website={website} />
+                      </FadeUp>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-[var(--color-text-secondary)] text-center py-12 border border-dashed border-[var(--color-border-subtle)] rounded-xl">
+                    <p className="text-lg">Examples coming soon.</p>
+                    <p className="text-sm mt-2 opacity-80">We are currently building the first zero-cost architecture for this industry.</p>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
+            );
+          })}
         </div>
       </section>
 

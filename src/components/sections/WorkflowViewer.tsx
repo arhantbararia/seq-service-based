@@ -34,16 +34,18 @@ export function WorkflowViewer({ jsonUrl }: WorkflowViewerProps) {
         const data = await res.json();
         
         // Parse Nodes
-        const parsedNodes = data.nodes.map((node: any) => ({
-          id: node.name,
-          type: 'n8n',
-          position: { x: node.position[0], y: node.position[1] },
-          data: { 
-            label: node.name, 
-            type: node.type,
-            notes: node.notes 
-          },
-        }));
+        const parsedNodes = data.nodes
+          .filter((node: any) => node.type !== 'n8n-nodes-base.stickyNote')
+          .map((node: any) => ({
+            id: node.name,
+            type: 'n8n',
+            position: { x: node.position[0], y: node.position[1] },
+            data: { 
+              label: node.name, 
+              type: node.type,
+              notes: node.notes,
+            },
+          }));
         
         // Parse Edges
         const parsedEdges: any[] = [];

@@ -1,0 +1,178 @@
+{
+  "name": "Project Status Broadcasts & Owner Digests",
+  "nodes": [
+    {
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -624,
+        32
+      ],
+      "id": "0cf0fd89-a8b1-4034-a755-67b8dd7d760f",
+      "name": "Webhook",
+      "webhookId": "4cda9e36-bb4d-4e26-9adb-03ed1fb24987",
+      "notesInFlow": true,
+      "notes": "Automated process."
+    },
+    {
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        -336,
+        32
+      ],
+      "id": "c0f853fc-a379-48c6-a2d2-522754e9e495",
+      "name": "Send message",
+      "webhookId": "f63c421c-0cdf-4576-a01b-e40edef6248a",
+      "notesInFlow": true,
+      "notes": "Sends a WhatsApp status update to the client."
+    },
+    {
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -16,
+        32
+      ],
+      "id": "056ddbb3-7e94-4745-994b-358bd1504aed",
+      "name": "Append row in sheet",
+      "notesInFlow": true,
+      "notes": "Automated process."
+    },
+    {
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -656,
+        416
+      ],
+      "id": "1eb7c893-b902-485b-ad46-35d7e84afaba",
+      "name": "Schedule Trigger",
+      "notes": "Runs automatically to compile project updates."
+    },
+    {
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -400,
+        416
+      ],
+      "id": "a47021b9-20c7-4911-8ac9-6bd76dc9e696",
+      "name": "Get row(s) in sheet",
+      "notesInFlow": true,
+      "notes": "Retrieves all active projects from the database."
+    },
+    {
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        -128,
+        384
+      ],
+      "id": "ccb60c9e-daaa-4375-84fe-ddb787dc50bc",
+      "name": "Aggregate",
+      "notesInFlow": true,
+      "notes": "Automated process."
+    },
+    {
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        160,
+        224
+      ],
+      "id": "e0b5bbca-fa39-4170-a748-1de8101565de",
+      "name": "Send message1",
+      "webhookId": "c64ed963-7e0c-4db0-8bcb-722b18997768",
+      "notesInFlow": true,
+      "notes": "Automated process."
+    },
+    {
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        176,
+        512
+      ],
+      "id": "80294e96-f7f8-49ad-9451-55294423a6e9",
+      "name": "Send email",
+      "webhookId": "3a81dcd0-6930-4a50-8c90-6ce3c19f3ee4",
+      "notesInFlow": true,
+      "notes": "Sends an internal digest email to the business owner."
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Send message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send message": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Send message1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "0075d702-13c0-442d-966e-617bccb6634c",
+  "meta": {
+    "instanceId": "19cdbff816187c47f2c2f164215bc7433a1126dea430f9366c8b9599f28afba0"
+  },
+  "id": "HKIN1LctvZP6wsjcUw4Zm",
+  "tier": 2
+}

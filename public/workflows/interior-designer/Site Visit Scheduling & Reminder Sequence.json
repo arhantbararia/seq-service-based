@@ -1,0 +1,263 @@
+{
+  "name": "Site Visit Scheduling & Reminder Sequence",
+  "nodes": [
+    {
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -512,
+        -16
+      ],
+      "id": "0563b35a-c83c-462f-8793-42b589925010",
+      "name": "Webhook",
+      "webhookId": "44f58abe-5a52-4660-86f1-97e00fd56680",
+      "notesInFlow": true,
+      "notes": "Captures new site visit requests from your website."
+    },
+    {
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -288,
+        -16
+      ],
+      "id": "131a2f7a-5cbb-4164-9bfa-fc6fc7a0bf52",
+      "name": "Append row in sheet",
+      "notesInFlow": true,
+      "notes": "Logs the site visit details into the schedule tracker."
+    },
+    {
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        -64,
+        -16
+      ],
+      "id": "90667a82-4411-4e24-9ef8-8fc8b098d10a",
+      "name": "Send message",
+      "webhookId": "61b75f30-be84-4a23-8203-d3b5bb47aeb5",
+      "notesInFlow": true,
+      "notes": "Sends a booking confirmation to the client via WhatsApp."
+    },
+    {
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -512,
+        208
+      ],
+      "id": "4568f0e2-eec3-4a46-9857-bbb87942fa7a",
+      "name": "Schedule Trigger",
+      "notes": "Checks daily for upcoming site visits."
+    },
+    {
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -288,
+        208
+      ],
+      "id": "40c74dab-aad3-4d8c-b8a2-1a10bf3262db",
+      "name": "Get row(s) in sheet",
+      "notesInFlow": true,
+      "notes": "Retrieves scheduled site visits for the next 24 hours."
+    },
+    {
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -64,
+        208
+      ],
+      "id": "e9b50d47-9685-47ae-8ae4-4ef3b3a81ca6",
+      "name": "Loop Over Items",
+      "notes": "Processes each upcoming site visit individually."
+    },
+    {
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        160,
+        208
+      ],
+      "id": "51c50231-273d-4f61-b0b7-81cf6554b965",
+      "name": "Send message1",
+      "webhookId": "5d39c448-e8fe-4ed2-925f-643814953401",
+      "notesInFlow": true,
+      "notes": "Sends a 24-hour reminder to the client with the location."
+    },
+    {
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -560,
+        496
+      ],
+      "id": "1376ce57-96ad-476d-b127-e8bd481f56d4",
+      "name": "Schedule Trigger1",
+      "notes": "Automated process."
+    },
+    {
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -352,
+        496
+      ],
+      "id": "ce149c48-f234-487e-8f96-88df2f963bc6",
+      "name": "Get row(s) in sheet1",
+      "notesInFlow": true,
+      "notes": "Automated process."
+    },
+    {
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -144,
+        496
+      ],
+      "id": "a274f0bd-e326-4f86-8469-214c21ee729d",
+      "name": "Loop Over Items1",
+      "notes": "Automated process."
+    },
+    {
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        160,
+        496
+      ],
+      "id": "2c20ead8-342d-4e49-975f-b03738d26dc3",
+      "name": "Send message2",
+      "webhookId": "a4e2b18a-2c83-4dc6-90aa-d108c3b4c48e",
+      "notesInFlow": true,
+      "notes": "Automated process."
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Send message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Send message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send message1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger1": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Send message2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send message2": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "9bdbf4e9-a388-4af2-b6b3-55c05295ab0e",
+  "meta": {
+    "instanceId": "19cdbff816187c47f2c2f164215bc7433a1126dea430f9366c8b9599f28afba0"
+  },
+  "id": "jmmKjFnrRzqCVXWYxkAf8",
+  "tier": 2
+}

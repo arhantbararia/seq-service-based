@@ -1,268 +1,141 @@
-﻿{
-    "name":  "Appointment Reminder + Prep Instructions",
-    "nodes":  [
-                  {
-                      "parameters":  {
-                                         "rule":  {
-                                                      "interval":  [
-                                                                       {
-                                                                           "field":  "hours"
-                                                                       }
-                                                                   ]
-                                                  }
-                                     },
-                      "type":  "n8n-nodes-base.scheduleTrigger",
-                      "typeVersion":  1.3,
-                      "position":  [
-                                       -432,
-                                       -64
-                                   ],
-                      "id":  "be758606-4a48-4ce3-88b4-57a04ba6f169",
-                      "name":  "Schedule Trigger",
-                      "notes":  "Runs periodically to check for upcoming patient appointments.",
-                      "notesInFlow":  true
-                  },
-                  {
-                      "parameters":  {
-                                         "documentId":  {
-                                                            "__rl":  true,
-                                                            "mode":  "list",
-                                                            "value":  ""
-                                                        },
-                                         "sheetName":  {
-                                                           "__rl":  true,
-                                                           "mode":  "list",
-                                                           "value":  ""
-                                                       }
-                                     },
-                      "type":  "n8n-nodes-base.googleSheets",
-                      "typeVersion":  4.7,
-                      "position":  [
-                                       -224,
-                                       -64
-                                   ],
-                      "id":  "8907d94d-86ab-47da-8f3c-c4d0d16c910e",
-                      "name":  "Get row(s) in sheet",
-                      "notesInFlow":  true,
-                      "notes":  "Pulls tomorrow\u0027s appointments from the booking sheet."
-                  },
-                  {
-                      "parameters":  {
-                                         "rules":  {
-                                                       "values":  [
-                                                                      {
-                                                                          "conditions":  {
-                                                                                             "options":  {
-                                                                                                             "caseSensitive":  true,
-                                                                                                             "leftValue":  "",
-                                                                                                             "typeValidation":  "strict",
-                                                                                                             "version":  3
-                                                                                                         },
-                                                                                             "conditions":  [
-                                                                                                                {
-                                                                                                                    "leftValue":  "={{ $json.Test_Type }}",
-                                                                                                                    "rightValue":  "Ultrasound",
-                                                                                                                    "operator":  {
-                                                                                                                                     "type":  "string",
-                                                                                                                                     "operation":  "equals"
-                                                                                                                                 },
-                                                                                                                    "id":  "7fd6d670-a0b8-4d25-8c12-86f40752fe67"
-                                                                                                                }
-                                                                                                            ],
-                                                                                             "combinator":  "and"
-                                                                                         }
-                                                                      },
-                                                                      {
-                                                                          "conditions":  {
-                                                                                             "options":  {
-                                                                                                             "caseSensitive":  true,
-                                                                                                             "leftValue":  "",
-                                                                                                             "typeValidation":  "strict",
-                                                                                                             "version":  3
-                                                                                                         },
-                                                                                             "conditions":  [
-                                                                                                                {
-                                                                                                                    "id":  "b91b0078-7ff6-4fe2-838c-fee26ce38a73",
-                                                                                                                    "leftValue":  "={{ $json.Test_Type }}",
-                                                                                                                    "rightValue":  "Blood Sugar",
-                                                                                                                    "operator":  {
-                                                                                                                                     "type":  "string",
-                                                                                                                                     "operation":  "equals",
-                                                                                                                                     "name":  "filter.operator.equals"
-                                                                                                                                 }
-                                                                                                                }
-                                                                                                            ],
-                                                                                             "combinator":  "and"
-                                                                                         }
-                                                                      },
-                                                                      {
-                                                                          "conditions":  {
-                                                                                             "options":  {
-                                                                                                             "caseSensitive":  true,
-                                                                                                             "leftValue":  "",
-                                                                                                             "typeValidation":  "strict",
-                                                                                                             "version":  3
-                                                                                                         },
-                                                                                             "conditions":  [
-                                                                                                                {
-                                                                                                                    "id":  "7bffb80a-03a4-4f13-b9c6-2f163c2d9432",
-                                                                                                                    "leftValue":  "",
-                                                                                                                    "rightValue":  "X-Ray",
-                                                                                                                    "operator":  {
-                                                                                                                                     "type":  "string",
-                                                                                                                                     "operation":  "equals",
-                                                                                                                                     "name":  "filter.operator.equals"
-                                                                                                                                 }
-                                                                                                                }
-                                                                                                            ],
-                                                                                             "combinator":  "and"
-                                                                                         }
-                                                                      }
-                                                                  ]
-                                                   },
-                                         "options":  {
-
-                                                     }
-                                     },
-                      "type":  "n8n-nodes-base.switch",
-                      "typeVersion":  3.4,
-                      "position":  [
-                                       -32,
-                                       -192
-                                   ],
-                      "id":  "96c5b505-023e-49a1-b094-37fcf6f4acd3",
-                      "name":  "Switch",
-                      "notes":  "Routes to the correct prep message based on test type (Ultrasound, Blood Sugar, X-Ray).",
-                      "notesInFlow":  true
-                  },
-                  {
-                      "parameters":  {
-                                         "operation":  "send",
-                                         "recipientPhoneNumber":  "={{ $json.Phone }}",
-                                         "textBody":  "=Hi {{ $json.Name }}, reminder for your Ultrasound tomorrow at {{ $json.Appointment_Time }}. Prep: Please drink 1 liter of water 1 hour before and arrive with a full bladder.",
-                                         "additionalFields":  {
-
-                                                              }
-                                     },
-                      "type":  "n8n-nodes-base.whatsApp",
-                      "typeVersion":  1.1,
-                      "position":  [
-                                       176,
-                                       -304
-                                   ],
-                      "id":  "a4595d20-b152-417f-a6f4-228a9d01d433",
-                      "name":  "Send message",
-                      "webhookId":  "4164d0a4-8d4f-454c-9d3a-15080f30d3af",
-                      "notes":  "Sends Ultrasound prep instructions via WhatsApp.",
-                      "notesInFlow":  true
-                  },
-                  {
-                      "parameters":  {
-                                         "operation":  "send",
-                                         "recipientPhoneNumber":  "={{ $json.Phone }}",
-                                         "textBody":  "=Hi {{ $json.Name }}, reminder for your Blood Sugar test tomorrow at {{ $json.Appointment_Time }}. Prep: Please ensure you have fasted for 10-12 hours before your visit.",
-                                         "additionalFields":  {
-
-                                                              }
-                                     },
-                      "type":  "n8n-nodes-base.whatsApp",
-                      "typeVersion":  1.1,
-                      "position":  [
-                                       176,
-                                       -192
-                                   ],
-                      "id":  "2832cfd5-f6a4-46c2-a300-81da5db759d3",
-                      "name":  "Send message1",
-                      "webhookId":  "856a7d99-43a4-46d4-afec-52e9465399f4",
-                      "notes":  "Sends Blood Sugar fasting instructions via WhatsApp.",
-                      "notesInFlow":  true
-                  },
-                  {
-                      "parameters":  {
-                                         "operation":  "send",
-                                         "recipientPhoneNumber":  "={{ $json.Phone }}",
-                                         "textBody":  "=Hi {{ $json.Name }}, reminder for your X-Ray tomorrow at {{ $json.Appointment_Time }}. No special preparation is required.",
-                                         "additionalFields":  {
-
-                                                              }
-                                     },
-                      "type":  "n8n-nodes-base.whatsApp",
-                      "typeVersion":  1.1,
-                      "position":  [
-                                       176,
-                                       -80
-                                   ],
-                      "id":  "200b8955-9278-4a52-bec1-996417d37902",
-                      "name":  "Send message2",
-                      "webhookId":  "7763aafc-3fc4-4217-8c2e-0f2a013e0a76",
-                      "notes":  "Sends X-Ray appointment reminder via WhatsApp.",
-                      "notesInFlow":  true
-                  }
-              ],
-    "pinData":  {
-
-                },
-    "connections":  {
-                        "Schedule Trigger":  {
-                                                 "main":  [
-                                                              [
-                                                                  {
-                                                                      "node":  "Get row(s) in sheet",
-                                                                      "type":  "main",
-                                                                      "index":  0
-                                                                  }
-                                                              ]
-                                                          ]
-                                             },
-                        "Get row(s) in sheet":  {
-                                                    "main":  [
-                                                                 [
-                                                                     {
-                                                                         "node":  "Switch",
-                                                                         "type":  "main",
-                                                                         "index":  0
-                                                                     }
-                                                                 ]
-                                                             ]
-                                                },
-                        "Switch":  {
-                                       "main":  [
-                                                    [
-                                                        {
-                                                            "node":  "Send message",
-                                                            "type":  "main",
-                                                            "index":  0
-                                                        }
-                                                    ],
-                                                    [
-                                                        {
-                                                            "node":  "Send message1",
-                                                            "type":  "main",
-                                                            "index":  0
-                                                        }
-                                                    ],
-                                                    [
-                                                        {
-                                                            "node":  "Send message2",
-                                                            "type":  "main",
-                                                            "index":  0
-                                                        }
-                                                    ]
-                                                ]
-                                   }
-                    },
-    "active":  false,
-    "settings":  {
-                     "executionOrder":  "v1",
-                     "availableInMCP":  false
-                 },
-    "versionId":  "7a553f44-395d-4d3d-a0ec-eec5ca75f341",
-    "meta":  {
-                 "templateCredsSetupCompleted":  true,
-                 "instanceId":  "19cdbff816187c47f2c2f164215bc7433a1126dea430f9366c8b9599f28afba0"
-             },
-    "id":  "qfgA7Io12mYtRYGjKhQau",
-    "tags":  [
-
-             ]
+{
+  "name": "Appointment Reminder + Prep Instructions",
+  "nodes": [
+    {
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -432,
+        -64
+      ],
+      "id": "be758606-4a48-4ce3-88b4-57a04ba6f169",
+      "name": "Schedule Trigger",
+      "notes": "Checks daily for upcoming patient appointments.",
+      "notesInFlow": true
+    },
+    {
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -224,
+        -64
+      ],
+      "id": "8907d94d-86ab-47da-8f3c-c4d0d16c910e",
+      "name": "Get row(s) in sheet",
+      "notesInFlow": true,
+      "notes": "Retrieves tomorrow's appointments from the booking tracker."
+    },
+    {
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -32,
+        -192
+      ],
+      "id": "96c5b505-023e-49a1-b094-37fcf6f4acd3",
+      "name": "Switch",
+      "notes": "Routes to the correct instructions for Ultrasound, Blood Sugar, or X-Ray.",
+      "notesInFlow": true
+    },
+    {
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        176,
+        -304
+      ],
+      "id": "a4595d20-b152-417f-a6f4-228a9d01d433",
+      "name": "Send message",
+      "webhookId": "4164d0a4-8d4f-454c-9d3a-15080f30d3af",
+      "notes": "Sends specific Ultrasound prep instructions via WhatsApp.",
+      "notesInFlow": true
+    },
+    {
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        176,
+        -192
+      ],
+      "id": "2832cfd5-f6a4-46c2-a300-81da5db759d3",
+      "name": "Send message1",
+      "webhookId": "856a7d99-43a4-46d4-afec-52e9465399f4",
+      "notes": "Sends specific Blood Sugar fasting instructions via WhatsApp.",
+      "notesInFlow": true
+    },
+    {
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        176,
+        -80
+      ],
+      "id": "200b8955-9278-4a52-bec1-996417d37902",
+      "name": "Send message2",
+      "webhookId": "7763aafc-3fc4-4217-8c2e-0f2a013e0a76",
+      "notes": "Sends a standard X-Ray appointment reminder via WhatsApp.",
+      "notesInFlow": true
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Send message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send message1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send message2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "7a553f44-395d-4d3d-a0ec-eec5ca75f341",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "19cdbff816187c47f2c2f164215bc7433a1126dea430f9366c8b9599f28afba0"
+  },
+  "id": "qfgA7Io12mYtRYGjKhQau"
 }

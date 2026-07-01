@@ -2,18 +2,14 @@
 
 import { useState } from "react";
 import { FadeUp } from "@/components/animations/FadeUp";
-import { FilterPill } from "@/components/ui/FilterPill";
-import { CTABanner } from "@/components/sections/CTABanner";
+import { VerticalSectionHeader } from "@/components/sections/VerticalSectionHeader";
 import { AutomationCard } from "@/components/sections/AutomationCard";
+import { CTABanner } from "@/components/sections/CTABanner";
 import { automations } from "@/data/automations";
 import { verticals } from "@/data/verticals";
 
 export default function AutomationsCatalogue() {
-  const [activeVertical, setActiveVertical] = useState<string>("all");
-
-  const filteredAutomations = activeVertical === "all" 
-    ? automations 
-    : automations.filter(a => a.verticalId === activeVertical || a.verticalId === "cross-vertical");
+  const crossVerticalAutomations = automations.filter(a => a.verticalId === "cross-vertical");
 
   return (
     <>
@@ -30,41 +26,83 @@ export default function AutomationsCatalogue() {
         </div>
       </section>
 
-      <section className="py-12 bg-[var(--color-background-primary)] min-h-[50vh]">
-        <div className="container mx-auto px-4 md:px-6">
-          <FadeUp delay={0.1}>
-            <div className="flex flex-wrap items-center justify-center gap-3 mb-12">
-              <FilterPill 
-                active={activeVertical === "all"} 
-                onClick={() => setActiveVertical("all")}
-              >
-                All Workflows
-              </FilterPill>
-              {verticals.map(vertical => (
-                <FilterPill 
-                  key={vertical.id} 
-                  active={activeVertical === vertical.id}
-                  onClick={() => setActiveVertical(vertical.id)}
-                >
-                  {vertical.name}
-                </FilterPill>
-              ))}
-            </div>
-          </FadeUp>
+      <section className="py-12 pb-24 bg-[var(--color-background-primary)] min-h-[50vh]">
+        <div className="container mx-auto px-4 md:px-6 max-w-7xl">
+          {verticals.map((vertical, index) => {
+             const verticalAutomations = automations.filter(a => a.verticalId === vertical.id);
+             
+             // Condense the list by name
+             const uniqueVerticalAutomations = [];
+             const seenNames = new Set();
+             for (const auto of verticalAutomations) {
+               if (!seenNames.has(auto.name)) {
+                 seenNames.add(auto.name);
+                 uniqueVerticalAutomations.push(auto);
+               }
+             }
 
-          <div className="grid lg:grid-cols-2 gap-8">
-            {filteredAutomations.map((automation, i) => (
-              <FadeUp key={automation.id} delay={0.1 * i} className="h-full">
-                <AutomationCard automation={automation} />
-              </FadeUp>
-            ))}
-            
-            {filteredAutomations.length === 0 && (
-              <div className="col-span-full py-20 text-center">
-                <p className="text-[var(--color-text-secondary)] text-lg">No predefined workflows for this industry yet. We can build a custom one for you.</p>
-              </div>
-            )}
-          </div>
+             // Find cross-industry automations
+             const crossIndustryEssentials = uniqueVerticalAutomations.filter(auto => {
+               return automations.some(a => a.name === auto.name && a.verticalId !== vertical.id && a.verticalId !== "cross-vertical");
+             });
+
+             const specificAutomations = uniqueVerticalAutomations.filter(auto => {
+                return !crossIndustryEssentials.some(c => c.name === auto.name);
+             });
+
+             const combinedCrossIndustry = [...crossVerticalAutomations, ...crossIndustryEssentials];
+
+             return (
+               <div key={vertical.id} className="mb-24 last:mb-0">
+                 <FadeUp delay={0.1}>
+                   <VerticalSectionHeader 
+                     name={vertical.name} 
+                     icp={vertical.icp} 
+                     icon={vertical.icon} 
+                   />
+                 </FadeUp>
+
+                 {uniqueVerticalAutomations.length === 0 ? (
+                   <div className="text-[var(--color-text-secondary)] text-center py-12 border border-dashed border-[var(--color-border-subtle)] rounded-xl">
+                     <p className="text-lg">Workflows coming soon.</p>
+                     <p className="text-sm mt-2 opacity-80">We are currently building automated solutions for this industry.</p>
+                   </div>
+                 ) : (
+                   <div className="space-y-16">
+                     {specificAutomations.length > 0 && (
+                       <div>
+                         <h3 className="text-xl font-display font-semibold text-[var(--color-text-primary)] mb-6 flex items-center gap-2">
+                           Industry Specific Workflows
+                         </h3>
+                         <div className="flex flex-col gap-6">
+                           {specificAutomations.map((automation, i) => (
+                             <FadeUp key={automation.id} delay={0.1 * i} className="h-full">
+                               <AutomationCard automation={automation} />
+                             </FadeUp>
+                           ))}
+                         </div>
+                       </div>
+                     )}
+
+                     {combinedCrossIndustry.length > 0 && (
+                       <div>
+                         <h3 className="text-xl font-display font-semibold text-[var(--color-text-primary)] mb-6 flex items-center gap-2 pt-8 border-t border-[var(--color-border-subtle)]">
+                           Cross-Industry Essentials
+                         </h3>
+                         <div className="flex flex-col gap-6">
+                           {combinedCrossIndustry.map((automation, i) => (
+                             <FadeUp key={automation.id} delay={0.1 * i} className="h-full">
+                               <AutomationCard automation={automation} isCrossIndustry={true} />
+                             </FadeUp>
+                           ))}
+                         </div>
+                       </div>
+                     )}
+                   </div>
+                 )}
+               </div>
+             );
+          })}
         </div>
       </section>
 

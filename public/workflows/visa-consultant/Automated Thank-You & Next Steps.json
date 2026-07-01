@@ -1,0 +1,97 @@
+{
+  "name": "Automated Thank-You & Next Steps",
+  "nodes": [
+    {
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -448,
+        112
+      ],
+      "id": "b67e5d38-d6fa-4395-bbaf-15f27e3f79b5",
+      "name": "Webhook",
+      "webhookId": "79427acc-0a33-419c-8c41-ac838a8b814f",
+      "notesInFlow": true,
+      "notes": "Automated process."
+    },
+    {
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -192,
+        224
+      ],
+      "id": "842ed284-7097-4a4e-92ed-d5816e014a23",
+      "name": "Edit Fields",
+      "notesInFlow": true,
+      "notes": "Formats the applicant's name and phone number cleanly."
+    },
+    {
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        160,
+        336
+      ],
+      "id": "cc1ee95b-2607-4d04-b0b2-a90e3b812573",
+      "name": "Send message",
+      "webhookId": "0a67719b-1014-4c78-9a34-13e8073f63a1",
+      "notesInFlow": true,
+      "notes": "Sends a WhatsApp message with the exact next steps and office hours."
+    },
+    {
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        144,
+        80
+      ],
+      "id": "269e6653-3d21-4a40-812e-64d1078a980e",
+      "name": "Send email",
+      "webhookId": "24fbf852-a703-4bc5-8a3a-b21f182b42a0",
+      "notesInFlow": true,
+      "notes": "Sends an email outlining the required documents and office details."
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Send message",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "2dd8a63c-e669-417e-a247-a2516d5c5036",
+  "meta": {
+    "instanceId": "19cdbff816187c47f2c2f164215bc7433a1126dea430f9366c8b9599f28afba0"
+  },
+  "id": "y3nwstMu7XWzpS8yMoB4E",
+  "tier": 1
+}

@@ -1,0 +1,106 @@
+{
+  "name": "Automated Post-Session Feedback & Review Generation",
+  "nodes": [
+    {
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -272,
+        -16
+      ],
+      "id": "d749588d-4cd7-4e8e-b0eb-b2af8f5528f0",
+      "name": "Webhook",
+      "webhookId": "61f59d64-751a-4617-9045-e97dbea061c8",
+      "notesInFlow": true,
+      "notes": "Automated process."
+    },
+    {
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        32,
+        -64
+      ],
+      "id": "0b8c6088-81ff-4fa6-9356-83586db04eb2",
+      "name": "Wait",
+      "webhookId": "10e84834-fdab-4534-b9aa-3688b4f8b46b",
+      "notesInFlow": true,
+      "notes": "Automated process."
+    },
+    {
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        352,
+        -48
+      ],
+      "id": "57dbe600-71b9-4871-ad38-3bf612f069ef",
+      "name": "Send message",
+      "webhookId": "349744b4-cca5-48ce-ab6f-24b8af2fb7b3",
+      "notesInFlow": true,
+      "onError": "continueErrorOutput",
+      "notes": "Sends a WhatsApp message asking the patient for private feedback."
+    },
+    {
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        608,
+        64
+      ],
+      "id": "62d14804-c339-4640-9b94-4074d1ad574d",
+      "name": "Send email",
+      "webhookId": "32fec1bd-593b-4ba3-8827-652390accf00",
+      "notesInFlow": true,
+      "notes": "Sends a Google Review link if the private feedback is positive."
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Send message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send message": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Send email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "6f903b9f-fc8f-4919-ba9f-ac03593cfd97",
+  "meta": {
+    "instanceId": "19cdbff816187c47f2c2f164215bc7433a1126dea430f9366c8b9599f28afba0"
+  },
+  "id": "vh_MLH7f1pEZ8ziK4A7ib",
+  "tier": 2
+}

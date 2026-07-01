@@ -1,0 +1,105 @@
+{
+  "name": "After-Hours Missed Call & Crisis Routing",
+  "nodes": [
+    {
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -320,
+        32
+      ],
+      "id": "850ab145-e435-4e90-ad39-a9c99b893a18",
+      "name": "Webhook",
+      "webhookId": "3aebd588-f974-4fb5-8a75-cbec68ca6fd6",
+      "notesInFlow": true,
+      "notes": "Captures missed calls outside of regular clinic hours."
+    },
+    {
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -32,
+        32
+      ],
+      "id": "a4a539c9-016b-4e9a-8c4a-c6a2249ba06c",
+      "name": "Append row in sheet",
+      "notesInFlow": true,
+      "notes": "Automated process."
+    },
+    {
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        256,
+        -128
+      ],
+      "id": "70f45677-7a57-49f1-aaab-3e8a83af6b5d",
+      "name": "Send message",
+      "webhookId": "07b5966e-1caf-4804-a875-20c11e776e60",
+      "notesInFlow": true,
+      "onError": "continueErrorOutput",
+      "notes": "Sends an automated text to non-urgent callers with booking links."
+    },
+    {
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        464,
+        48
+      ],
+      "id": "b29e6cf2-1672-4731-8a45-a3470197fb0f",
+      "name": "Send email",
+      "webhookId": "8ee19e4c-5870-45a3-9a24-d5d4df7ed415",
+      "notesInFlow": true,
+      "notes": "Alerts the on-call therapist internally about the crisis."
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Send message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send message": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Send email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "88392cab-ffbe-4652-84f6-d05efee5c404",
+  "meta": {
+    "instanceId": "19cdbff816187c47f2c2f164215bc7433a1126dea430f9366c8b9599f28afba0"
+  },
+  "id": "36yy8gLDMVJqHi3QybIHY",
+  "tier": 1
+}

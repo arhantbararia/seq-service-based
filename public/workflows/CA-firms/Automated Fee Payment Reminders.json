@@ -1,307 +1,164 @@
-﻿{
-    "name":  "Automated Fee Payment Reminders",
-    "nodes":  [
-                  {
-                      "parameters":  {
-                                         "content":  "Credentials: Set up your Google Sheets API (via OAuth2 or Service Account) to connect n8n to your master sheet. Configure your WhatsApp Business Cloud credentials inside n8n.\nThe Database: Create a Google Sheet named \"Invoice Tracker\" with the following columns: Client Name, Phone Number, Service (e.g., ITR Filing), Amount, Payment Link (your pre-generated Razorpay/PayU link), Invoice Date, and Status (Pending / Paid).",
-                                         "width":  384
-                                     },
-                      "type":  "n8n-nodes-base.stickyNote",
-                      "typeVersion":  1,
-                      "position":  [
-                                       -464,
-                                       -224
-                                   ],
-                      "id":  "5650c1c6-d907-4cc0-a787-8c31beb8cbc7",
-                      "name":  "Sticky Note",
-                      "notes":  "Setup: Configure Google Sheets and WhatsApp credentials, then create an Invoice Tracker sheet."
-                  },
-                  {
-                      "parameters":  {
-                                         "rule":  {
-                                                      "interval":  [
-                                                                       {
-                                                                           "triggerAtHour":  10
-                                                                       }
-                                                                   ]
-                                                  }
-                                     },
-                      "type":  "n8n-nodes-base.scheduleTrigger",
-                      "typeVersion":  1.3,
-                      "position":  [
-                                       -144,
-                                       -32
-                                   ],
-                      "id":  "143238f3-f520-418c-bb4d-0fca6efd8037",
-                      "name":  "Schedule Trigger",
-                      "notes":  "Runs daily at 10 AM to check for pending invoices.",
-                      "notesInFlow":  true
-                  },
-                  {
-                      "parameters":  {
-                                         "documentId":  {
-                                                            "__rl":  true,
-                                                            "mode":  "list",
-                                                            "value":  ""
-                                                        },
-                                         "sheetName":  {
-                                                           "__rl":  true,
-                                                           "mode":  "list",
-                                                           "value":  ""
-                                                       }
-                                     },
-                      "type":  "n8n-nodes-base.googleSheets",
-                      "typeVersion":  4.7,
-                      "position":  [
-                                       64,
-                                       -32
-                                   ],
-                      "id":  "c4d1b979-3381-4ef6-b011-ef36dbd3a7a7",
-                      "name":  "Get row(s) in sheet",
-                      "notesInFlow":  true,
-                      "notes":  "Pulls all rows from Invoice Tracker where payment status is Pending."
-                  },
-                  {
-                      "parameters":  {
-                                         "options":  {
-
-                                                     }
-                                     },
-                      "type":  "n8n-nodes-base.splitInBatches",
-                      "typeVersion":  3,
-                      "position":  [
-                                       272,
-                                       -32
-                                   ],
-                      "id":  "161b623b-1998-48b5-964f-c2f756c55a5e",
-                      "name":  "Loop Over Items",
-                      "notes":  "Processes each pending invoice one at a time.",
-                      "notesInFlow":  true
-                  },
-                  {
-                      "parameters":  {
-                                         "rules":  {
-                                                       "values":  [
-                                                                      {
-                                                                          "conditions":  {
-                                                                                             "options":  {
-                                                                                                             "caseSensitive":  true,
-                                                                                                             "leftValue":  "",
-                                                                                                             "typeValidation":  "strict",
-                                                                                                             "version":  3
-                                                                                                         },
-                                                                                             "conditions":  [
-                                                                                                                {
-                                                                                                                    "leftValue":  "",
-                                                                                                                    "rightValue":  "",
-                                                                                                                    "operator":  {
-                                                                                                                                     "type":  "string",
-                                                                                                                                     "operation":  "equals"
-                                                                                                                                 },
-                                                                                                                    "id":  "cc421fc7-79f0-4eaa-bda4-0bfafbc32375"
-                                                                                                                }
-                                                                                                            ],
-                                                                                             "combinator":  "and"
-                                                                                         }
-                                                                      },
-                                                                      {
-                                                                          "conditions":  {
-                                                                                             "options":  {
-                                                                                                             "caseSensitive":  true,
-                                                                                                             "leftValue":  "",
-                                                                                                             "typeValidation":  "strict",
-                                                                                                             "version":  3
-                                                                                                         },
-                                                                                             "conditions":  [
-                                                                                                                {
-                                                                                                                    "id":  "63e887a2-4fb8-4a5d-8173-e0fdad872055",
-                                                                                                                    "leftValue":  "",
-                                                                                                                    "rightValue":  "",
-                                                                                                                    "operator":  {
-                                                                                                                                     "type":  "string",
-                                                                                                                                     "operation":  "equals",
-                                                                                                                                     "name":  "filter.operator.equals"
-                                                                                                                                 }
-                                                                                                                }
-                                                                                                            ],
-                                                                                             "combinator":  "and"
-                                                                                         }
-                                                                      },
-                                                                      {
-                                                                          "conditions":  {
-                                                                                             "options":  {
-                                                                                                             "caseSensitive":  true,
-                                                                                                             "leftValue":  "",
-                                                                                                             "typeValidation":  "strict",
-                                                                                                             "version":  3
-                                                                                                         },
-                                                                                             "conditions":  [
-                                                                                                                {
-                                                                                                                    "id":  "5dbcfd13-dde3-442f-bef4-8694c1b1e334",
-                                                                                                                    "leftValue":  "",
-                                                                                                                    "rightValue":  "",
-                                                                                                                    "operator":  {
-                                                                                                                                     "type":  "string",
-                                                                                                                                     "operation":  "equals",
-                                                                                                                                     "name":  "filter.operator.equals"
-                                                                                                                                 }
-                                                                                                                }
-                                                                                                            ],
-                                                                                             "combinator":  "and"
-                                                                                         }
-                                                                      }
-                                                                  ]
-                                                   },
-                                         "options":  {
-
-                                                     }
-                                     },
-                      "type":  "n8n-nodes-base.switch",
-                      "typeVersion":  3.4,
-                      "position":  [
-                                       480,
-                                       176
-                                   ],
-                      "id":  "1bf9d37e-01db-4b0c-84e4-58f25cfdfdcc",
-                      "name":  "Switch",
-                      "notes":  "Routes to Day 0, Day 3, or Day 7 message based on invoice age.",
-                      "notesInFlow":  true
-                  },
-                  {
-                      "parameters":  {
-                                         "operation":  "send",
-                                         "additionalFields":  {
-
-                                                              }
-                                     },
-                      "type":  "n8n-nodes-base.whatsApp",
-                      "typeVersion":  1.1,
-                      "position":  [
-                                       720,
-                                       -48
-                                   ],
-                      "id":  "838cc1f7-4fa7-4a1e-8a62-306faa80b9ed",
-                      "name":  "Send message",
-                      "webhookId":  "928d1456-5860-4117-9f2d-bf6352060cb5",
-                      "notes":  "Sends the initial payment reminder with a UPI link on Day 0.",
-                      "notesInFlow":  true
-                  },
-                  {
-                      "parameters":  {
-                                         "operation":  "send",
-                                         "additionalFields":  {
-
-                                                              }
-                                     },
-                      "type":  "n8n-nodes-base.whatsApp",
-                      "typeVersion":  1.1,
-                      "position":  [
-                                       752,
-                                       144
-                                   ],
-                      "id":  "539d2933-1abc-4838-9587-8b8611fa1ce9",
-                      "name":  "Send message1",
-                      "webhookId":  "877d2717-71f9-4f68-a771-2bcfb5ce585d",
-                      "notesInFlow":  true,
-                      "notes":  "Sends a follow-up payment reminder on Day 3."
-                  },
-                  {
-                      "parameters":  {
-                                         "operation":  "send",
-                                         "additionalFields":  {
-
-                                                              }
-                                     },
-                      "type":  "n8n-nodes-base.whatsApp",
-                      "typeVersion":  1.1,
-                      "position":  [
-                                       704,
-                                       384
-                                   ],
-                      "id":  "8768b466-6945-437d-b4e2-a18d93821bec",
-                      "name":  "Send message2",
-                      "webhookId":  "cc068dc5-2c0f-493b-a193-0c5c6a77a2f8",
-                      "notesInFlow":  true,
-                      "notes":  "Sends a final overdue notice on Day 7."
-                  }
-              ],
-    "pinData":  {
-
-                },
-    "connections":  {
-                        "Schedule Trigger":  {
-                                                 "main":  [
-                                                              [
-                                                                  {
-                                                                      "node":  "Get row(s) in sheet",
-                                                                      "type":  "main",
-                                                                      "index":  0
-                                                                  }
-                                                              ]
-                                                          ]
-                                             },
-                        "Get row(s) in sheet":  {
-                                                    "main":  [
-                                                                 [
-                                                                     {
-                                                                         "node":  "Loop Over Items",
-                                                                         "type":  "main",
-                                                                         "index":  0
-                                                                     }
-                                                                 ]
-                                                             ]
-                                                },
-                        "Loop Over Items":  {
-                                                "main":  [
-                                                             [
-
-                                                             ],
-                                                             [
-                                                                 {
-                                                                     "node":  "Switch",
-                                                                     "type":  "main",
-                                                                     "index":  0
-                                                                 }
-                                                             ]
-                                                         ]
-                                            },
-                        "Switch":  {
-                                       "main":  [
-                                                    [
-                                                        {
-                                                            "node":  "Send message",
-                                                            "type":  "main",
-                                                            "index":  0
-                                                        }
-                                                    ],
-                                                    [
-                                                        {
-                                                            "node":  "Send message1",
-                                                            "type":  "main",
-                                                            "index":  0
-                                                        }
-                                                    ],
-                                                    [
-                                                        {
-                                                            "node":  "Send message2",
-                                                            "type":  "main",
-                                                            "index":  0
-                                                        }
-                                                    ]
-                                                ]
-                                   }
-                    },
-    "active":  false,
-    "settings":  {
-                     "executionOrder":  "v1",
-                     "availableInMCP":  false
-                 },
-    "versionId":  "a09af75c-3a3a-4215-ac39-1cb99a29df95",
-    "meta":  {
-                 "instanceId":  "19cdbff816187c47f2c2f164215bc7433a1126dea430f9366c8b9599f28afba0"
-             },
-    "id":  "oehDEkhJcXkQRTKTgwWsE",
-    "tags":  [
-
-             ]
+{
+  "name": "Automated Fee Payment Reminders",
+  "nodes": [
+    {
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -144,
+        -32
+      ],
+      "id": "143238f3-f520-418c-bb4d-0fca6efd8037",
+      "name": "Schedule Trigger",
+      "notes": "Checks daily for pending invoice payments.",
+      "notesInFlow": true
+    },
+    {
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        64,
+        -32
+      ],
+      "id": "c4d1b979-3381-4ef6-b011-ef36dbd3a7a7",
+      "name": "Get row(s) in sheet",
+      "notesInFlow": true,
+      "notes": "Retrieves clients with unpaid invoices."
+    },
+    {
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        272,
+        -32
+      ],
+      "id": "161b623b-1998-48b5-964f-c2f756c55a5e",
+      "name": "Loop Over Items",
+      "notes": "Processes each pending invoice individually.",
+      "notesInFlow": true
+    },
+    {
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        480,
+        176
+      ],
+      "id": "1bf9d37e-01db-4b0c-84e4-58f25cfdfdcc",
+      "name": "Switch",
+      "notes": "Determines if the invoice is 0, 3, or 7 days overdue.",
+      "notesInFlow": true
+    },
+    {
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        720,
+        -48
+      ],
+      "id": "838cc1f7-4fa7-4a1e-8a62-306faa80b9ed",
+      "name": "Send message",
+      "webhookId": "928d1456-5860-4117-9f2d-bf6352060cb5",
+      "notes": "Sends an initial payment reminder with a UPI link.",
+      "notesInFlow": true
+    },
+    {
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        752,
+        144
+      ],
+      "id": "539d2933-1abc-4838-9587-8b8611fa1ce9",
+      "name": "Send message1",
+      "webhookId": "877d2717-71f9-4f68-a771-2bcfb5ce585d",
+      "notesInFlow": true,
+      "notes": "Sends a follow-up reminder for 3-day overdue invoices."
+    },
+    {
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        704,
+        384
+      ],
+      "id": "8768b466-6945-437d-b4e2-a18d93821bec",
+      "name": "Send message2",
+      "webhookId": "cc068dc5-2c0f-493b-a193-0c5c6a77a2f8",
+      "notesInFlow": true,
+      "notes": "Sends a final notice for 7-day overdue invoices."
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Send message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send message1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send message2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "a09af75c-3a3a-4215-ac39-1cb99a29df95",
+  "meta": {
+    "instanceId": "19cdbff816187c47f2c2f164215bc7433a1126dea430f9366c8b9599f28afba0"
+  },
+  "id": "oehDEkhJcXkQRTKTgwWsE"
 }

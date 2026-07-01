@@ -1,0 +1,167 @@
+{
+  "name": "The \"Zero-Drop\" Patient Intake System",
+  "nodes": [
+    {
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -400,
+        0
+      ],
+      "id": "f4f11ec5-d2b9-4b6c-8767-e0a0c3b4d222",
+      "name": "Webhook",
+      "webhookId": "004b453c-3f18-4068-a4d4-5506934472ab",
+      "notesInFlow": true,
+      "notes": "Captures new patient inquiries from the clinic website."
+    },
+    {
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -192,
+        0
+      ],
+      "id": "4f87b9ca-fb88-43f0-9313-1386b9ae2490",
+      "name": "Append row in sheet",
+      "notesInFlow": true,
+      "notes": "Logs the new patient into the master tracker."
+    },
+    {
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        16,
+        0
+      ],
+      "id": "b6e4e867-518b-4da4-984c-16a045000794",
+      "name": "Send message",
+      "webhookId": "b83693b1-cdcb-4699-afa9-4a1d776d8774",
+      "notesInFlow": true,
+      "onError": "continueErrorOutput",
+      "notes": "Alerts the clinic staff internally about the new inquiry."
+    },
+    {
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        208,
+        -176
+      ],
+      "id": "c43660ef-41b6-4a5c-9def-624da3329d93",
+      "name": "Send message1",
+      "webhookId": "35fdfaab-f918-4bd2-9b4f-e9babdfeb181",
+      "notesInFlow": true,
+      "onError": "continueErrorOutput",
+      "notes": "Sends an instant welcome message to the patient."
+    },
+    {
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        448,
+        -48
+      ],
+      "id": "d856021d-ebd1-491a-9106-b88aff1e4fe9",
+      "name": "Send email",
+      "webhookId": "53cecc80-9b3b-4f5d-a92c-6d8b49a47cf3",
+      "notes": "Automated process."
+    },
+    {
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        256,
+        144
+      ],
+      "id": "815ee5ac-c431-4ebb-aa41-7d56c96792b3",
+      "name": "Send email1",
+      "webhookId": "0412b346-d225-41f2-9929-484a26584f45",
+      "notes": "Alerts the staff via email if the WhatsApp welcome fails."
+    },
+    {
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        416,
+        -304
+      ],
+      "id": "dc5cdcc4-7fd7-4797-9b91-22dc2479d0fa",
+      "name": "Send email2",
+      "webhookId": "62099a23-9a52-4711-9bb8-a105392f4f9d",
+      "notesInFlow": true,
+      "notes": "Confirms internally that the patient was successfully onboarded."
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Send message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send message": {
+      "main": [
+        [
+          {
+            "node": "Send message1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send email1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send message1": {
+      "main": [
+        [
+          {
+            "node": "Send email2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "ba5042b6-ca1a-455e-ada1-14555365b715",
+  "meta": {
+    "instanceId": "19cdbff816187c47f2c2f164215bc7433a1126dea430f9366c8b9599f28afba0"
+  },
+  "id": "LuQAsigSvwdBKQCx",
+  "tier": 1
+}

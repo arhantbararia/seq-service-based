@@ -1,0 +1,167 @@
+{
+  "name": "The \"Zero-Drop\" Lead Intake System",
+  "nodes": [
+    {
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -400,
+        0
+      ],
+      "id": "00a486e0-d1e1-4d3d-adc2-31130ba1c6a7",
+      "name": "Webhook",
+      "webhookId": "cae1c915-dceb-4005-9110-f792229f5502",
+      "notesInFlow": true,
+      "notes": "Captures new visa inquiries from the consultant website."
+    },
+    {
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -192,
+        0
+      ],
+      "id": "e66d7f4b-f04a-41f5-ac0e-4a1ed299938d",
+      "name": "Append row in sheet",
+      "notesInFlow": true,
+      "notes": "Logs the new applicant into the master tracker."
+    },
+    {
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        16,
+        0
+      ],
+      "id": "058f8469-b44c-45a3-a9a7-8ac2e6e119ba",
+      "name": "Send message",
+      "webhookId": "620d2c73-3b57-401f-81b7-46e6b687f005",
+      "notesInFlow": true,
+      "onError": "continueErrorOutput",
+      "notes": "Alerts the consulting team internally about the new inquiry."
+    },
+    {
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        208,
+        -176
+      ],
+      "id": "3f460a07-8cf2-432a-9f5c-98e8b7e3b76a",
+      "name": "Send message1",
+      "webhookId": "b1a1185b-6a5a-4106-9a36-1b723436cd0e",
+      "notesInFlow": true,
+      "onError": "continueErrorOutput",
+      "notes": "Sends an instant welcome message outlining passport requirements."
+    },
+    {
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        448,
+        -64
+      ],
+      "id": "36a642d2-4aa7-4fad-89d3-1e6edc055002",
+      "name": "Send email",
+      "webhookId": "af0dc735-cfad-4feb-94dc-563f79e3c07c",
+      "notes": "Automated process."
+    },
+    {
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        240,
+        128
+      ],
+      "id": "3be122a1-c8c0-44f8-a8b3-dd0959530edf",
+      "name": "Send email1",
+      "webhookId": "4d68d158-7365-4427-9790-98e7e97ed4d0",
+      "notes": "Alerts the team via email if the WhatsApp welcome fails."
+    },
+    {
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        416,
+        -272
+      ],
+      "id": "0df40fd1-bfd2-4fff-b5d8-71adaeb695c6",
+      "name": "Send email2",
+      "webhookId": "0dd5f54f-596d-4cee-a5bb-2289678c458a",
+      "notesInFlow": true,
+      "notes": "Confirms internally that the visa applicant was successfully onboarded."
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Send message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send message": {
+      "main": [
+        [
+          {
+            "node": "Send message1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send email1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send message1": {
+      "main": [
+        [
+          {
+            "node": "Send email2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "ca52d6f3-93f8-4616-8ab1-7cc9a4823844",
+  "meta": {
+    "instanceId": "19cdbff816187c47f2c2f164215bc7433a1126dea430f9366c8b9599f28afba0"
+  },
+  "id": "rhDhxkcKs7gytxAu7_JGP",
+  "tier": 1
+}

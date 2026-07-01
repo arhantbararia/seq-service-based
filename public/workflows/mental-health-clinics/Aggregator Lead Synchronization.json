@@ -1,0 +1,122 @@
+{
+  "name": "Aggregator Lead Synchronization",
+  "nodes": [
+    {
+      "type": "n8n-nodes-base.emailReadImap",
+      "typeVersion": 2.1,
+      "position": [
+        -416,
+        -32
+      ],
+      "id": "d3480266-5466-41ff-b726-fc37a071f833",
+      "name": "Email Trigger (IMAP)",
+      "notes": "Monitors inbox for new patient leads from directories."
+    },
+    {
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -112,
+        -48
+      ],
+      "id": "a7a8f35a-f164-4cd7-979f-384c2d3f3b5c",
+      "name": "Code in Python (Native)",
+      "notesInFlow": true,
+      "notes": "Extracts the patient's name, phone, and inquiry type."
+    },
+    {
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        272,
+        64
+      ],
+      "id": "95714696-9ed1-44b2-aaf4-9bc118520877",
+      "name": "Append row in sheet",
+      "notesInFlow": true,
+      "notes": "Logs the patient lead into the clinic's database."
+    },
+    {
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -416,
+        176
+      ],
+      "id": "b784cbe7-241b-4788-b958-0ee68bc62dde",
+      "name": "Webhook",
+      "webhookId": "cd7f069e-be7a-45c1-ba52-aba1ce217a8f",
+      "notes": "Captures direct patient lead submissions instantly."
+    },
+    {
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -64,
+        160
+      ],
+      "id": "955c6594-2b51-4614-875f-46deb9d49231",
+      "name": "Edit Fields",
+      "notesInFlow": true,
+      "notes": "Formats the extracted patient details for logging."
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Email Trigger (IMAP)": {
+      "main": [
+        [
+          {
+            "node": "Code in Python (Native)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in Python (Native)": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "59151803-2bab-4e56-8439-2a92a44728be",
+  "meta": {
+    "instanceId": "19cdbff816187c47f2c2f164215bc7433a1126dea430f9366c8b9599f28afba0"
+  },
+  "id": "8ZpviFmzZINykeXk",
+  "tier": 1
+}

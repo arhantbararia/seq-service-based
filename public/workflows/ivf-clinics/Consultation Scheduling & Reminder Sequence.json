@@ -1,0 +1,171 @@
+{
+  "name": "Consultation Scheduling & Reminder Sequence",
+  "nodes": [
+    {
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -208,
+        32
+      ],
+      "id": "dd7eb65d-d131-43e0-a9af-7e93b37b1371",
+      "name": "Webhook",
+      "webhookId": "12064c53-7c59-438a-ab82-27c6d236782e",
+      "notesInFlow": true,
+      "notes": "Captures new consultation requests from the clinic website."
+    },
+    {
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        80,
+        32
+      ],
+      "id": "816034c0-c23c-479e-a399-81006fe4a65e",
+      "name": "Send message",
+      "webhookId": "9a7bd7cd-9b8b-498a-bb07-485e55224bd3",
+      "notesInFlow": true,
+      "notes": "Sends a booking confirmation to the patient via WhatsApp."
+    },
+    {
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        352,
+        32
+      ],
+      "id": "6c3faeea-2b35-4b47-b528-a8a193e4dfbd",
+      "name": "Append row in sheet",
+      "notesInFlow": true,
+      "notes": "Logs the consultation details into the schedule tracker."
+    },
+    {
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -224,
+        288
+      ],
+      "id": "b714e4fa-540c-4925-88c4-e981b4ffeff6",
+      "name": "Schedule Trigger",
+      "notes": "Checks daily for upcoming consultations."
+    },
+    {
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -16,
+        288
+      ],
+      "id": "fac1f9b4-fe12-4c8b-a759-0bc07bd0ce6f",
+      "name": "Get row(s) in sheet",
+      "notesInFlow": true,
+      "notes": "Retrieves scheduled consultations for the next 24 hours."
+    },
+    {
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        256,
+        288
+      ],
+      "id": "ca97953d-9635-4f31-8512-9f9212481276",
+      "name": "Loop Over Items",
+      "notes": "Processes each upcoming consultation individually."
+    },
+    {
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        480,
+        336
+      ],
+      "id": "3e536167-2e3f-4eca-8d91-745382a7cea3",
+      "name": "Send message1",
+      "webhookId": "b9093739-9be7-48cf-8eb4-750d76abf051",
+      "notesInFlow": true,
+      "notes": "Sends a 24-hour reminder with clinic directions."
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Send message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send message": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Send message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send message1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "04179e6b-403f-4da7-9ceb-cfa84115668c",
+  "meta": {
+    "instanceId": "19cdbff816187c47f2c2f164215bc7433a1126dea430f9366c8b9599f28afba0"
+  },
+  "id": "d8eZ-oQUKJnLa_2FqAkXA",
+  "tier": 2
+}

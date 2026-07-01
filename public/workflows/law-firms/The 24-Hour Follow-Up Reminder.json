@@ -1,110 +1,77 @@
-﻿{
-    "name":  "The 24-Hour Follow-Up Reminder",
-    "nodes":  [
-                  {
-                      "parameters":  {
-                                         "rule":  {
-                                                      "interval":  [
-                                                                       {
-                                                                           "field":  "hours"
-                                                                       }
-                                                                   ]
-                                                  }
-                                     },
-                      "type":  "n8n-nodes-base.scheduleTrigger",
-                      "typeVersion":  1.3,
-                      "position":  [
-                                       -416,
-                                       -16
-                                   ],
-                      "id":  "498256c8-cffe-4bec-8d68-d6748b523e73",
-                      "name":  "Schedule Trigger",
-                      "notes":  "Runs every hour to check for leads needing follow-up.",
-                      "notesInFlow":  true
-                  },
-                  {
-                      "parameters":  {
-                                         "documentId":  {
-                                                            "__rl":  true,
-                                                            "mode":  "list",
-                                                            "value":  ""
-                                                        },
-                                         "sheetName":  {
-                                                           "__rl":  true,
-                                                           "mode":  "list",
-                                                           "value":  ""
-                                                       }
-                                     },
-                      "type":  "n8n-nodes-base.googleSheets",
-                      "typeVersion":  4.7,
-                      "position":  [
-                                       -208,
-                                       -16
-                                   ],
-                      "id":  "025b98a3-cefa-451c-982c-438ddca146a5",
-                      "name":  "Get row(s) in sheet",
-                      "notesInFlow":  true,
-                      "notes":  "Pulls leads from the sheet that were received 24 hours ago."
-                  },
-                  {
-                      "parameters":  {
-                                         "operation":  "send",
-                                         "textBody":  "=Reminder: {{ $json.Name }} submitted an inquiry yesterday regarding {{ $json.Matter }}. No follow-up recorded yet. Tap to message: wa.me/{{ $json.Phone }}",
-                                         "additionalFields":  {
-
-                                                              }
-                                     },
-                      "type":  "n8n-nodes-base.whatsApp",
-                      "typeVersion":  1.1,
-                      "position":  [
-                                       0,
-                                       -16
-                                   ],
-                      "id":  "ec4d18db-3b57-409b-af2c-b79b6d2c2ac3",
-                      "name":  "Send message",
-                      "webhookId":  "4ab4ca38-6802-46d3-9183-a8f57c6bd927",
-                      "notes":  "Sends a WhatsApp follow-up reminder to the Advocate.",
-                      "notesInFlow":  true
-                  }
-              ],
-    "pinData":  {
-
-                },
-    "connections":  {
-                        "Schedule Trigger":  {
-                                                 "main":  [
-                                                              [
-                                                                  {
-                                                                      "node":  "Get row(s) in sheet",
-                                                                      "type":  "main",
-                                                                      "index":  0
-                                                                  }
-                                                              ]
-                                                          ]
-                                             },
-                        "Get row(s) in sheet":  {
-                                                    "main":  [
-                                                                 [
-                                                                     {
-                                                                         "node":  "Send message",
-                                                                         "type":  "main",
-                                                                         "index":  0
-                                                                     }
-                                                                 ]
-                                                             ]
-                                                }
-                    },
-    "active":  false,
-    "settings":  {
-                     "executionOrder":  "v1",
-                     "availableInMCP":  false
-                 },
-    "versionId":  "b05a4841-b393-44bc-8c4f-f05fdfe7df16",
-    "meta":  {
-                 "instanceId":  "19cdbff816187c47f2c2f164215bc7433a1126dea430f9366c8b9599f28afba0"
-             },
-    "id":  "J32RbLmQHkC36to6dSI42",
-    "tags":  [
-
-             ]
+{
+  "name": "The 24-Hour Follow-Up Reminder",
+  "nodes": [
+    {
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -416,
+        -16
+      ],
+      "id": "498256c8-cffe-4bec-8d68-d6748b523e73",
+      "name": "Schedule Trigger",
+      "notes": "Checks daily for pending follow-ups.",
+      "notesInFlow": true
+    },
+    {
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -208,
+        -16
+      ],
+      "id": "025b98a3-cefa-451c-982c-438ddca146a5",
+      "name": "Get row(s) in sheet",
+      "notesInFlow": true,
+      "notes": "Retrieves leads that were contacted 24 hours ago without a response."
+    },
+    {
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        -16
+      ],
+      "id": "ec4d18db-3b57-409b-af2c-b79b6d2c2ac3",
+      "name": "Send message",
+      "webhookId": "4ab4ca38-6802-46d3-9183-a8f57c6bd927",
+      "notes": "Sends a polite WhatsApp follow-up to the prospective client.",
+      "notesInFlow": true
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Send message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "b05a4841-b393-44bc-8c4f-f05fdfe7df16",
+  "meta": {
+    "instanceId": "19cdbff816187c47f2c2f164215bc7433a1126dea430f9366c8b9599f28afba0"
+  },
+  "id": "J32RbLmQHkC36to6dSI42"
 }

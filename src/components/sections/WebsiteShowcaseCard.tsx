@@ -8,8 +8,8 @@ interface WebsiteShowcaseCardProps {
 }
 
 export function WebsiteShowcaseCard({ website }: WebsiteShowcaseCardProps) {
-  return (
-    <Card className="h-full flex flex-col overflow-hidden bg-[var(--color-background-primary)] border-[var(--color-border-subtle)] group">
+  const CardContentWrapper = (
+    <Card className={`h-full flex flex-col overflow-hidden bg-[var(--color-background-primary)] border-[var(--color-border-subtle)] group ${website.url ? 'hover:border-[var(--color-accent-primary)] transition-colors' : ''}`}>
       <div className="relative aspect-[4/3] overflow-hidden border-b border-[var(--color-border-subtle)]">
         <div className="absolute inset-0 bg-[var(--color-background-tertiary)] animate-pulse -z-10"></div>
         <RevealImage 
@@ -26,8 +26,11 @@ export function WebsiteShowcaseCard({ website }: WebsiteShowcaseCardProps) {
       </div>
       
       <CardContent className="p-6 flex-grow flex flex-col">
-        <h3 className="font-display text-xl font-semibold mb-2 text-[var(--color-text-primary)] group-hover:text-[var(--color-accent-primary)] transition-colors">
+        <h3 className="font-display text-xl font-semibold mb-2 text-[var(--color-text-primary)] group-hover:text-[var(--color-accent-primary)] transition-colors flex items-center justify-between">
           {website.title}
+          {website.url && (
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-0 group-hover:opacity-100 transition-opacity"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
+          )}
         </h3>
         <p className="text-[var(--color-text-secondary)] text-sm mb-6 flex-grow">
           {website.description}
@@ -59,4 +62,14 @@ export function WebsiteShowcaseCard({ website }: WebsiteShowcaseCardProps) {
       </CardContent>
     </Card>
   );
+
+  if (website.url) {
+    return (
+      <a href={website.url} target="_blank" rel="noopener noreferrer" className="block h-full cursor-pointer">
+        {CardContentWrapper}
+      </a>
+    );
+  }
+
+  return CardContentWrapper;
 }

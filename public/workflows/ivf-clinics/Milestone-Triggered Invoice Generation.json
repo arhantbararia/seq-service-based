@@ -1,0 +1,229 @@
+{
+  "name": "Milestone-Triggered Invoice Generation",
+  "nodes": [
+    {
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -704,
+        32
+      ],
+      "id": "3bd43eb8-9d30-42f6-8a36-5133252dd687",
+      "name": "Webhook",
+      "webhookId": "831d330d-bf02-4ccd-bdfd-7258a7347a22",
+      "notesInFlow": true,
+      "notes": "Receives treatment milestone updates from the clinic CRM."
+    },
+    {
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -48,
+        272
+      ],
+      "id": "b67c7bf8-ff1b-4be4-acff-014e62da1738",
+      "name": "HTTP Request",
+      "notesInFlow": true,
+      "notes": "Generates a dynamic PDF invoice for the treatment."
+    },
+    {
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -928,
+        272
+      ],
+      "id": "112919c5-be93-4863-a2fe-4e016805bbdf",
+      "name": "Schedule Trigger",
+      "notes": "Automated process."
+    },
+    {
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -720,
+        304
+      ],
+      "id": "a9a30f8c-fb4d-463a-8d31-9128a530c7b0",
+      "name": "Get row(s) in sheet",
+      "notesInFlow": true,
+      "notes": "Retrieves the patient's ongoing treatment records."
+    },
+    {
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -544,
+        320
+      ],
+      "id": "f37e3d63-cf72-4aa0-9344-048501821f0c",
+      "name": "Loop Over Items",
+      "notes": "Automated process."
+    },
+    {
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -304,
+        432
+      ],
+      "id": "3250004a-4c0b-4e0e-aab5-726ac721d805",
+      "name": "If",
+      "notesInFlow": true,
+      "notes": "Identifies patients with new treatment milestones."
+    },
+    {
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        256,
+        208
+      ],
+      "id": "4451e911-5873-485f-9dbe-3f86e233a24c",
+      "name": "Send message",
+      "webhookId": "98c6fa8f-bd9d-4aa5-aa36-2c2268577969",
+      "notesInFlow": true,
+      "notes": "Sends the generated PDF invoice to the patient via WhatsApp."
+    },
+    {
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        288,
+        448
+      ],
+      "id": "7d39a235-9cdd-4c31-a0a8-33a935f6d8d9",
+      "name": "Send email",
+      "webhookId": "6f2fb819-0586-4c12-9eda-a19a7d5e5d74",
+      "notesInFlow": true,
+      "notes": "Emails the generated PDF invoice to the patient."
+    },
+    {
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        576,
+        288
+      ],
+      "id": "f34200d2-45ec-4fc6-9633-e9f2fb21b5be",
+      "name": "Append or update row in sheet",
+      "notesInFlow": true,
+      "notes": "Automated process."
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Send message",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send message": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send email": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "306ec300-046f-4c0a-9627-dd6e43c14b71",
+  "meta": {
+    "instanceId": "19cdbff816187c47f2c2f164215bc7433a1126dea430f9366c8b9599f28afba0"
+  },
+  "id": "wG5qZUkua8SwaHu3",
+  "tier": 2
+}

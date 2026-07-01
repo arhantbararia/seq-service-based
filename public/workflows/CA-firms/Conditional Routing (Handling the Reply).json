@@ -1,206 +1,122 @@
-﻿{
-    "name":  "Conditional Routing (Handling the Reply)",
-    "nodes":  [
-                  {
-                      "parameters":  {
-                                         "updates":  [
-                                                         "messages"
-                                                     ],
-                                         "options":  {
-
-                                                     }
-                                     },
-                      "type":  "n8n-nodes-base.whatsAppTrigger",
-                      "typeVersion":  1,
-                      "position":  [
-                                       -288,
-                                       -32
-                                   ],
-                      "id":  "a2b31f52-8e8e-42d0-8ffb-fad51caec16f",
-                      "name":  "WhatsApp Trigger",
-                      "webhookId":  "94916e8b-6222-45c6-9956-d8cf5808644b",
-                      "notesInFlow":  true,
-                      "notes":  "Listens for incoming client replies on WhatsApp."
-                  },
-                  {
-                      "parameters":  {
-                                         "rules":  {
-                                                       "values":  [
-                                                                      {
-                                                                          "conditions":  {
-                                                                                             "options":  {
-                                                                                                             "caseSensitive":  true,
-                                                                                                             "leftValue":  "",
-                                                                                                             "typeValidation":  "strict",
-                                                                                                             "version":  3
-                                                                                                         },
-                                                                                             "conditions":  [
-                                                                                                                {
-                                                                                                                    "leftValue":  "",
-                                                                                                                    "rightValue":  "",
-                                                                                                                    "operator":  {
-                                                                                                                                     "type":  "string",
-                                                                                                                                     "operation":  "equals"
-                                                                                                                                 },
-                                                                                                                    "id":  "25fbd4f4-af75-4933-a37c-92fa4d687313"
-                                                                                                                }
-                                                                                                            ],
-                                                                                             "combinator":  "and"
-                                                                                         }
-                                                                      },
-                                                                      {
-                                                                          "conditions":  {
-                                                                                             "options":  {
-                                                                                                             "caseSensitive":  true,
-                                                                                                             "leftValue":  "",
-                                                                                                             "typeValidation":  "strict",
-                                                                                                             "version":  3
-                                                                                                         },
-                                                                                             "conditions":  [
-                                                                                                                {
-                                                                                                                    "id":  "5d3cb03e-99a4-451f-b4c0-4c5fb93fcce4",
-                                                                                                                    "leftValue":  "",
-                                                                                                                    "rightValue":  "",
-                                                                                                                    "operator":  {
-                                                                                                                                     "type":  "string",
-                                                                                                                                     "operation":  "equals",
-                                                                                                                                     "name":  "filter.operator.equals"
-                                                                                                                                 }
-                                                                                                                }
-                                                                                                            ],
-                                                                                             "combinator":  "and"
-                                                                                         }
-                                                                      }
-                                                                  ]
-                                                   },
-                                         "options":  {
-
-                                                     }
-                                     },
-                      "type":  "n8n-nodes-base.switch",
-                      "typeVersion":  3.4,
-                      "position":  [
-                                       -80,
-                                       -32
-                                   ],
-                      "id":  "62d7a8b3-e561-43ca-89f1-84660a81ebd5",
-                      "name":  "Switch",
-                      "notesInFlow":  true,
-                      "notes":  "Routes the reply based on sentiment: positive or negative."
-                  },
-                  {
-                      "parameters":  {
-                                         "operation":  "send",
-                                         "additionalFields":  {
-
-                                                              }
-                                     },
-                      "type":  "n8n-nodes-base.whatsApp",
-                      "typeVersion":  1.1,
-                      "position":  [
-                                       128,
-                                       -128
-                                   ],
-                      "id":  "c71de46d-9242-4863-8088-16d86028e039",
-                      "name":  "Send message",
-                      "webhookId":  "e1d8113a-2cbe-4d33-b31f-a42e28056d0c",
-                      "notesInFlow":  true,
-                      "notes":  "Sends a Google Review link to satisfied clients."
-                  },
-                  {
-                      "parameters":  {
-                                         "operation":  "send",
-                                         "additionalFields":  {
-
-                                                              }
-                                     },
-                      "type":  "n8n-nodes-base.whatsApp",
-                      "typeVersion":  1.1,
-                      "position":  [
-                                       128,
-                                       64
-                                   ],
-                      "id":  "0d7715d3-e73c-4e40-82b5-ebe18c9dbec5",
-                      "name":  "Send message1",
-                      "webhookId":  "1c92d4e8-fc2a-4dd3-bdc1-9a5831ec441d",
-                      "notesInFlow":  true,
-                      "notes":  "Directs unhappy clients to a private feedback form."
-                  },
-                  {
-                      "parameters":  {
-                                         "options":  {
-
-                                                     }
-                                     },
-                      "type":  "n8n-nodes-base.emailSend",
-                      "typeVersion":  2.1,
-                      "position":  [
-                                       336,
-                                       64
-                                   ],
-                      "id":  "d12ab553-94ae-4951-a120-00f04efe9181",
-                      "name":  "Send email",
-                      "webhookId":  "7b32c9fc-d51b-4f20-8dfc-381ec79a74cd",
-                      "notes":  "Emails the founding partner an internal alert about negative feedback.",
-                      "notesInFlow":  true
-                  }
-              ],
-    "pinData":  {
-
-                },
-    "connections":  {
-                        "WhatsApp Trigger":  {
-                                                 "main":  [
-                                                              [
-                                                                  {
-                                                                      "node":  "Switch",
-                                                                      "type":  "main",
-                                                                      "index":  0
-                                                                  }
-                                                              ]
-                                                          ]
-                                             },
-                        "Switch":  {
-                                       "main":  [
-                                                    [
-                                                        {
-                                                            "node":  "Send message",
-                                                            "type":  "main",
-                                                            "index":  0
-                                                        }
-                                                    ],
-                                                    [
-                                                        {
-                                                            "node":  "Send message1",
-                                                            "type":  "main",
-                                                            "index":  0
-                                                        }
-                                                    ]
-                                                ]
-                                   },
-                        "Send message1":  {
-                                              "main":  [
-                                                           [
-                                                               {
-                                                                   "node":  "Send email",
-                                                                   "type":  "main",
-                                                                   "index":  0
-                                                               }
-                                                           ]
-                                                       ]
-                                          }
-                    },
-    "active":  false,
-    "settings":  {
-                     "executionOrder":  "v1",
-                     "availableInMCP":  false
-                 },
-    "versionId":  "f2221166-9ad6-4771-9f88-0b1a905756fa",
-    "meta":  {
-                 "instanceId":  "19cdbff816187c47f2c2f164215bc7433a1126dea430f9366c8b9599f28afba0"
-             },
-    "id":  "Jl90cezNTu6jdTW_2KOTQ",
-    "tags":  [
-
-             ]
+{
+  "name": "Conditional Routing (Handling the Reply)",
+  "nodes": [
+    {
+      "type": "n8n-nodes-base.whatsAppTrigger",
+      "typeVersion": 1,
+      "position": [
+        -288,
+        -32
+      ],
+      "id": "a2b31f52-8e8e-42d0-8ffb-fad51caec16f",
+      "name": "WhatsApp Trigger",
+      "webhookId": "94916e8b-6222-45c6-9956-d8cf5808644b",
+      "notesInFlow": true,
+      "notes": "Listens for incoming client replies on WhatsApp."
+    },
+    {
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -80,
+        -32
+      ],
+      "id": "62d7a8b3-e561-43ca-89f1-84660a81ebd5",
+      "name": "Switch",
+      "notesInFlow": true,
+      "notes": "Routes the reply based on positive or negative sentiment."
+    },
+    {
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        128,
+        -128
+      ],
+      "id": "c71de46d-9242-4863-8088-16d86028e039",
+      "name": "Send message",
+      "webhookId": "e1d8113a-2cbe-4d33-b31f-a42e28056d0c",
+      "notesInFlow": true,
+      "notes": "Sends a Google Review link to satisfied clients."
+    },
+    {
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        128,
+        64
+      ],
+      "id": "0d7715d3-e73c-4e40-82b5-ebe18c9dbec5",
+      "name": "Send message1",
+      "webhookId": "1c92d4e8-fc2a-4dd3-bdc1-9a5831ec441d",
+      "notesInFlow": true,
+      "notes": "Directs unhappy clients to a private feedback form."
+    },
+    {
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        336,
+        64
+      ],
+      "id": "d12ab553-94ae-4951-a120-00f04efe9181",
+      "name": "Send email",
+      "webhookId": "7b32c9fc-d51b-4f20-8dfc-381ec79a74cd",
+      "notes": "Alerts the founding partner internally about negative feedback.",
+      "notesInFlow": true
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "WhatsApp Trigger": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Send message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send message1": {
+      "main": [
+        [
+          {
+            "node": "Send email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "f2221166-9ad6-4771-9f88-0b1a905756fa",
+  "meta": {
+    "instanceId": "19cdbff816187c47f2c2f164215bc7433a1126dea430f9366c8b9599f28afba0"
+  },
+  "id": "Jl90cezNTu6jdTW_2KOTQ"
 }

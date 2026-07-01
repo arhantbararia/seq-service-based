@@ -2,60 +2,44 @@
   "name": "Lead Capture & CRM Routing",
   "nodes": [
     {
-      "parameters": {
-        "path": "lead-intake",
-        "options": {}
-      },
       "name": "Webhook Trigger",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 1,
-      "position": [250, 300],
-      "notes": "Receives lead data from Website Forms or Aggregators."
+      "position": [
+        250,
+        300
+      ],
+      "notes": "Automated process."
     },
     {
-      "parameters": {
-        "operation": "append",
-        "sheetId": "1A2B3C4D5E",
-        "range": "Leads!A:D",
-        "options": {}
-      },
       "name": "Save to Google Sheets",
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 1,
-      "position": [550, 200],
-      "notes": "Logs the raw lead data into the master tracker."
+      "position": [
+        550,
+        200
+      ],
+      "notes": "Automated process."
     },
     {
-      "parameters": {
-        "fromEmail": "hello@sequels.in",
-        "toEmail": "={{$json.email}}",
-        "subject": "Thank you for reaching out",
-        "text": "We will get back to you shortly.",
-        "options": {}
-      },
       "name": "Send Auto-Reply",
       "type": "n8n-nodes-base.emailSend",
       "typeVersion": 1,
-      "position": [550, 400],
-      "notes": "Sends a customized confirmation email to the prospect."
+      "position": [
+        550,
+        400
+      ],
+      "notes": "Automated process."
     },
     {
-      "parameters": {
-        "conditions": {
-          "string": [
-            {
-              "value1": "={{$json.budget}}",
-              "operation": "contains",
-              "value2": "High"
-            }
-          ]
-        }
-      },
       "name": "Filter High Value",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
-      "position": [850, 300],
-      "notes": "Routes high-value leads for immediate manual follow-up."
+      "position": [
+        850,
+        300
+      ],
+      "notes": "Automated process."
     }
   ],
   "connections": {

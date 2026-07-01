@@ -1,0 +1,255 @@
+{
+  "CA-firms/Automated Compliance Deadline Reminders.json": {
+    "Schedule Trigger": "Checks daily for upcoming compliance deadlines.",
+    "Get row(s) in sheet": "Retrieves pending clients from the compliance calendar.",
+    "If": "Identifies clients with filings due in the next 7 days.",
+    "Loop Over Items": "Processes each client individually.",
+    "Send message": "Sends a WhatsApp reminder with the filing type and due date."
+  },
+  "CA-firms/Automated Fee Payment Reminders.json": {
+    "Schedule Trigger": "Checks daily for pending invoice payments.",
+    "Get row(s) in sheet": "Retrieves clients with unpaid invoices.",
+    "Loop Over Items": "Processes each pending invoice individually.",
+    "Switch": "Determines if the invoice is 0, 3, or 7 days overdue.",
+    "Send message": "Sends an initial payment reminder with a UPI link.",
+    "Send message1": "Sends a follow-up reminder for 3-day overdue invoices.",
+    "Send message2": "Sends a final notice for 7-day overdue invoices."
+  },
+  "CA-firms/Conditional Routing (Handling the Reply).json": {
+    "WhatsApp Trigger": "Listens for incoming client replies on WhatsApp.",
+    "Switch": "Routes the reply based on positive or negative sentiment.",
+    "Send message": "Sends a Google Review link to satisfied clients.",
+    "Send message1": "Directs unhappy clients to a private feedback form.",
+    "Send email": "Alerts the founding partner internally about negative feedback."
+  },
+  "CA-firms/One-Click Document Collection.json": {
+    "Schedule Trigger": "Checks daily for pending document requests.",
+    "Get row(s) in sheet": "Retrieves clients with pending document statuses.",
+    "If": "Identifies clients who haven't been contacted recently.",
+    "Loop Over Items": "Processes each qualifying client individually.",
+    "Switch": "Routes to the specific checklist for ITR, GST, or Audit.",
+    "Send message": "Sends an ITR-specific document checklist via WhatsApp.",
+    "Send message1": "Sends a GST-specific document checklist via WhatsApp.",
+    "Send message2": "Sends an Audit-specific document checklist via WhatsApp.",
+    "Append or update row in sheet": "Updates the last reminder date in the tracker."
+  },
+  "CA-firms/The Satisfaction Outreach.json": {
+    "Google Sheets Trigger": "Triggers when a service delivery is marked as updated.",
+    "If": "Confirms the service status is successfully completed.",
+    "Send message": "Sends a satisfaction check-in message to the client on WhatsApp."
+  },
+  
+  "interior-designer/Aggregator Lead Synchronization.json": {
+    "Email Trigger (IMAP)": "Monitors your inbox for new aggregator lead emails.",
+    "Code in Python (Native)": "Extracts the client name, phone, and inquiry type.",
+    "Append row in sheet": "Logs the new lead into your central aggregator tracker.",
+    "Webhook": "Instantly captures direct lead submissions from aggregators.",
+    "Edit Fields": "Formats the extracted lead details for the database."
+  },
+  "interior-designer/Milestone-Triggered Invoice Generation.json": {
+    "Webhook": "Receives project milestone updates from your CRM.",
+    "HTTP Request": "Generates a dynamic PDF invoice for the client.",
+    "Get row(s) in sheet": "Retrieves details of ongoing interior design projects.",
+    "If": "Identifies clients with new project updates.",
+    "Send message": "Sends the generated PDF invoice to the client via WhatsApp.",
+    "Send email": "Emails the generated PDF invoice to the client."
+  },
+  "interior-designer/Project Status Broadcasts & Owner Digests.json": {
+    "Schedule Trigger": "Runs automatically to compile project updates.",
+    "Get row(s) in sheet": "Retrieves all active projects from the database.",
+    "Loop Over Items": "Processes each project individually.",
+    "If": "Checks if the project has pending updates for the client.",
+    "Send message": "Sends a WhatsApp status update to the client.",
+    "Send email": "Sends an internal digest email to the business owner."
+  },
+  "interior-designer/Site Visit Scheduling & Reminder Sequence.json": {
+    "Webhook": "Captures new site visit requests from your website.",
+    "Append row in sheet": "Logs the site visit details into the schedule tracker.",
+    "Send message": "Sends a booking confirmation to the client via WhatsApp.",
+    "Schedule Trigger": "Checks daily for upcoming site visits.",
+    "Get row(s) in sheet": "Retrieves scheduled site visits for the next 24 hours.",
+    "Loop Over Items": "Processes each upcoming site visit individually.",
+    "Send message1": "Sends a 24-hour reminder to the client with the location.",
+    "Send email": "Notifies the design team internally about the upcoming visit."
+  },
+  "interior-designer/The WhatsApp Instant Brochure Dispatch.json": {
+    "WhatsApp Trigger": "Listens for incoming brochure requests on WhatsApp.",
+    "If": "Verifies the request contains brochure keywords.",
+    "Send message": "Instantly sends the design brochure PDF to the prospect.",
+    "Send email": "Alerts the team internally if the automated dispatch fails."
+  },
+  "interior-designer/The _Zero-Drop_ Lead Intake System.json": {
+    "Webhook": "Captures new lead inquiries from the website form.",
+    "Append row in sheet": "Logs the new lead into the master tracker.",
+    "Send message": "Alerts the design team internally about the new lead.",
+    "Send message1": "Sends an instant welcome message to the prospect.",
+    "Send email1": "Alerts the team via email if the WhatsApp welcome fails.",
+    "Send email2": "Confirms internally that the lead was successfully onboarded."
+  },
+
+  "ivf-clinics/Aggregator Lead Synchronization.json": {
+    "Email Trigger (IMAP)": "Monitors inbox for new patient leads from aggregators.",
+    "Code in Python (Native)": "Extracts the patient's name, phone, and inquiry type.",
+    "Append row in sheet": "Logs the patient lead into the clinic's database.",
+    "Webhook": "Captures direct patient lead submissions instantly.",
+    "Edit Fields": "Formats the extracted patient details for logging."
+  },
+  "ivf-clinics/Consultation Scheduling & Reminder Sequence.json": {
+    "Webhook": "Captures new consultation requests from the clinic website.",
+    "Append row in sheet": "Logs the consultation details into the schedule tracker.",
+    "Send message": "Sends a booking confirmation to the patient via WhatsApp.",
+    "Schedule Trigger": "Checks daily for upcoming consultations.",
+    "Get row(s) in sheet": "Retrieves scheduled consultations for the next 24 hours.",
+    "Loop Over Items": "Processes each upcoming consultation individually.",
+    "Send message1": "Sends a 24-hour reminder with clinic directions.",
+    "Send email": "Notifies the medical staff internally about the appointment."
+  },
+  "ivf-clinics/Milestone-Triggered Invoice Generation.json": {
+    "Webhook": "Receives treatment milestone updates from the clinic CRM.",
+    "HTTP Request": "Generates a dynamic PDF invoice for the treatment.",
+    "Get row(s) in sheet": "Retrieves the patient's ongoing treatment records.",
+    "If": "Identifies patients with new treatment milestones.",
+    "Send message": "Sends the generated PDF invoice to the patient via WhatsApp.",
+    "Send email": "Emails the generated PDF invoice to the patient."
+  },
+  "ivf-clinics/The Missing Document & Lab Report Chaser.json": {
+    "Schedule Trigger": "Checks daily for pending patient lab reports.",
+    "Get row(s) in sheet": "Retrieves patients with pending document statuses.",
+    "Loop Over Items": "Processes each pending patient individually.",
+    "Send message": "Sends a gentle WhatsApp reminder to upload the pending lab report."
+  },
+  "ivf-clinics/The WhatsApp Instant Brochure Dispatch.json": {
+    "WhatsApp Trigger": "Listens for incoming treatment brochure requests on WhatsApp.",
+    "If": "Verifies the request contains brochure keywords.",
+    "Send message": "Instantly sends the IVF treatment brochure PDF to the patient.",
+    "Send email": "Alerts the staff internally if the automated dispatch fails."
+  },
+  "ivf-clinics/The _Zero-Drop_ Patient Intake System.json": {
+    "Webhook": "Captures new patient inquiries from the clinic website.",
+    "Append row in sheet": "Logs the new patient into the master tracker.",
+    "Send message": "Alerts the clinic staff internally about the new inquiry.",
+    "Send message1": "Sends an instant welcome message to the patient.",
+    "Send email1": "Alerts the staff via email if the WhatsApp welcome fails.",
+    "Send email2": "Confirms internally that the patient was successfully onboarded."
+  },
+
+  "law-firms/Court Hearing Reminder.json": {
+    "Schedule Trigger": "Checks daily for upcoming court hearings.",
+    "Get row(s) in sheet": "Retrieves scheduled hearings for the next 48 hours.",
+    "Loop Over Items": "Processes each upcoming hearing individually.",
+    "Send message": "Sends a WhatsApp reminder to the client with the court details.",
+    "Send email": "Emails a copy of the hearing reminder to the client."
+  },
+  "law-firms/Instant Capture & Alerts.json": {
+    "Webhook": "Captures new legal inquiries directly from the firm's website.",
+    "Append row in sheet": "Logs the new inquiry into the central case tracker.",
+    "Send message": "Instantly alerts the legal team internally on WhatsApp.",
+    "Send email": "Sends an email alert to the managing partner about the new lead."
+  },
+  "law-firms/The 24-Hour Follow-Up Reminder.json": {
+    "Schedule Trigger": "Checks daily for pending follow-ups.",
+    "Get row(s) in sheet": "Retrieves leads that were contacted 24 hours ago without a response.",
+    "Loop Over Items": "Processes each pending follow-up individually.",
+    "Send message": "Sends a polite WhatsApp follow-up to the prospective client."
+  },
+  "law-firms/Weekly Lead Summary.json": {
+    "Schedule Trigger": "Runs automatically at the end of the week.",
+    "Get row(s) in sheet": "Retrieves all leads generated in the past 7 days.",
+    "Code in Python (Native)": "Compiles the leads into a summarized report.",
+    "Send email": "Sends the weekly lead summary report to the managing partners."
+  },
+
+  "mental-health-clinics/After-Hours Missed Call & Crisis Routing.json": {
+    "Webhook": "Captures missed calls outside of regular clinic hours.",
+    "Switch": "Determines if the call is urgent based on the caller's input.",
+    "Send message": "Sends an automated text to non-urgent callers with booking links.",
+    "Send message1": "Sends emergency helpline details for urgent crisis calls.",
+    "Send email": "Alerts the on-call therapist internally about the crisis."
+  },
+  "mental-health-clinics/Aggregator Lead Synchronization.json": {
+    "Email Trigger (IMAP)": "Monitors inbox for new patient leads from directories.",
+    "Code in Python (Native)": "Extracts the patient's name, phone, and inquiry type.",
+    "Append row in sheet": "Logs the patient lead into the clinic's database.",
+    "Webhook": "Captures direct patient lead submissions instantly.",
+    "Edit Fields": "Formats the extracted patient details for logging."
+  },
+  "mental-health-clinics/Automated Post-Session Feedback & Review Generation.json": {
+    "Google Sheets Trigger": "Triggers when a therapy session is marked as completed.",
+    "If": "Confirms the session was successfully attended.",
+    "Send message": "Sends a WhatsApp message asking the patient for private feedback.",
+    "Send email": "Sends a Google Review link if the private feedback is positive."
+  },
+  "mental-health-clinics/Consultation Scheduling & Reminder Sequence.json": {
+    "Webhook": "Captures new therapy session bookings from the website.",
+    "Append row in sheet": "Logs the session details into the scheduling tracker.",
+    "Send message": "Sends a booking confirmation to the patient via WhatsApp.",
+    "Schedule Trigger": "Checks daily for upcoming therapy sessions.",
+    "Get row(s) in sheet": "Retrieves scheduled sessions for the next 24 hours.",
+    "Loop Over Items": "Processes each upcoming session individually.",
+    "Send message1": "Sends a 24-hour reminder with clinic or video link details.",
+    "Send email": "Notifies the therapist internally about the upcoming session."
+  },
+  "mental-health-clinics/The WhatsApp Instant Brochure_ Form Dispatch.json": {
+    "WhatsApp Trigger": "Listens for incoming requests for therapy information on WhatsApp.",
+    "If": "Verifies the request contains brochure keywords.",
+    "Send message": "Instantly sends the therapy service brochure PDF to the patient.",
+    "Send email": "Alerts the clinic internally if the automated dispatch fails."
+  },
+  "mental-health-clinics/The _Zero-Drop_ Patient Intake System.json": {
+    "Webhook": "Captures new patient inquiries from the clinic website.",
+    "Append row in sheet": "Logs the new patient into the master tracker.",
+    "Send message": "Alerts the clinic staff internally about the new inquiry.",
+    "Send message1": "Sends an instant, warm welcome message to the patient.",
+    "Send email1": "Alerts the staff via email if the WhatsApp welcome fails.",
+    "Send email2": "Confirms internally that the patient was successfully onboarded."
+  },
+
+  "path-labs/Appointment Reminder + Prep Instructions.json": {
+    "Schedule Trigger": "Checks daily for upcoming patient appointments.",
+    "Get row(s) in sheet": "Retrieves tomorrow's appointments from the booking tracker.",
+    "Switch": "Routes to the correct instructions for Ultrasound, Blood Sugar, or X-Ray.",
+    "Send message": "Sends specific Ultrasound prep instructions via WhatsApp.",
+    "Send message1": "Sends specific Blood Sugar fasting instructions via WhatsApp.",
+    "Send message2": "Sends a standard X-Ray appointment reminder via WhatsApp."
+  },
+  "path-labs/Lead Gen and WA reachout.json": {
+    "Webhook": "Receives new patient test inquiries from the website form.",
+    "Edit Fields": "Formats the patient data and test type cleanly.",
+    "Append or update row in sheet": "Logs the new inquiry into the master patient tracker.",
+    "Send message": "Sends an internal WhatsApp notification to the lab staff."
+  },
+  "path-labs/report sending automation.json": {
+    "Google Sheets Trigger": "Triggers when a row in the test results tracker is updated.",
+    "If": "Checks if the test report status is marked as 'Ready'.",
+    "Edit Fields": "Formats the patient name and test details for the message.",
+    "Send message": "Sends a WhatsApp message notifying the patient their report is ready."
+  },
+
+  "visa-consultant/Aggregator Lead Synchronization.json": {
+    "Email Trigger (IMAP)": "Monitors inbox for new visa leads from aggregators.",
+    "Code in Python (Native)": "Extracts the applicant's name, phone, and visa type.",
+    "Append row in sheet": "Logs the visa lead into the central database.",
+    "Webhook": "Captures direct visa lead submissions instantly.",
+    "Edit Fields": "Formats the extracted applicant details for logging."
+  },
+  "visa-consultant/Automated Thank-You & Next Steps.json": {
+    "Edit Fields": "Formats the applicant's name and phone number cleanly.",
+    "Send message": "Sends a WhatsApp message with the exact next steps and office hours.",
+    "Send email": "Sends an email outlining the required documents and office details."
+  },
+  "visa-consultant/The _Zero-Drop_ Lead Intake System.json": {
+    "Webhook": "Captures new visa inquiries from the consultant website.",
+    "Append row in sheet": "Logs the new applicant into the master tracker.",
+    "Send message": "Alerts the consulting team internally about the new inquiry.",
+    "Send message1": "Sends an instant welcome message outlining passport requirements.",
+    "Send email1": "Alerts the team via email if the WhatsApp welcome fails.",
+    "Send email2": "Confirms internally that the visa applicant was successfully onboarded."
+  },
+  
+  "lead-capture.json": {
+    "Webhook": "Captures general inquiries directly from the website form.",
+    "Edit Fields": "Formats the submitted data for internal processing.",
+    "Append or update row in sheet": "Logs the new inquiry into the central lead database.",
+    "Send message": "Sends an automated welcome message to the new lead."
+  }
+}
