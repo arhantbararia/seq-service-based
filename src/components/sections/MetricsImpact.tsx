@@ -63,10 +63,10 @@ export function MetricsImpact() {
     <section className="bg-[var(--color-background-primary)]">
       <div className="container mx-auto px-4 md:px-6">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-0 border-t border-l border-[var(--color-border-subtle)]">
-          <StatItem value={50} label="Projects Delivered" suffix="+" delay={0} />
-          <StatItem value={12000} label="Hours Saved" suffix="+" delay={0.1} />
-          <StatItem value={7} label="Verticals Served" delay={0.2} />
-          <StatItem value={98} label="Client Retention" suffix="%" delay={0.3} />
+          <StatItem value={48} label="Prototype Turnaround" suffix="-Hour" delay={0} />
+          <StatItem value={4} label="Service Tiers" delay={0.1} />
+          <StatItem value={3} label="Core Verticals Mapped" delay={0.2} />
+          <StatItem value={22} label="Segments Served" delay={0.3} />
         </div>
       </div>
     </section>

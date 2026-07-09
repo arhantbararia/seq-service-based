@@ -1,5 +1,14 @@
 import { CompanyOverview } from "@/components/sections/CompanyOverview";
 import { CTABanner } from "@/components/sections/CTABanner";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "About Sequels — Our Story, Vision & Engineering Philosophy",
+  description: "Bridging the gap between heavy backend engineering and accessible front-facing solutions. Democratizing digital infrastructure for MSMEs.",
+  alternates: {
+    canonical: "/about",
+  },
+};
 
 export default function About() {
   return (

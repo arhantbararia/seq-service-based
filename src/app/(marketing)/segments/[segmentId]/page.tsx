@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import { verticals } from "@/data/verticals";
 import { automations } from "@/data/automations";
 import { websites } from "@/data/websites";
+import { segmentDefinitions } from "@/data/segment-definitions";
+import { Metadata } from "next";
 import { AutomationCard } from "@/components/sections/AutomationCard";
 import { WebsiteShowcaseCard } from "@/components/sections/WebsiteShowcaseCard";
 import { FadeUp } from "@/components/animations/FadeUp";
@@ -14,6 +16,43 @@ import { Button } from "@/components/ui/Button";
 interface SegmentPageProps {
   params: {
     segmentId: string;
+  };
+}
+
+export async function generateStaticParams() {
+  return verticals.flatMap(vertical => 
+    (vertical.segments || []).map(segment => ({
+      segmentId: segment.id,
+    }))
+  );
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ segmentId: string }> | { segmentId: string } }): Promise<Metadata> {
+  const resolvedParams = await params;
+  const { segmentId } = resolvedParams;
+
+  let currentVertical = null;
+  let currentSegment = null;
+
+  for (const vertical of verticals) {
+    const seg = vertical.segments?.find(s => s.id === segmentId);
+    if (seg) {
+      currentSegment = seg;
+      currentVertical = vertical;
+      break;
+    }
+  }
+
+  if (!currentSegment || !currentVertical) {
+    return {};
+  }
+
+  return {
+    title: `${currentSegment.name} Website & Automation | ${currentVertical.name}`,
+    description: segmentDefinitions[segmentId] || currentSegment.description,
+    alternates: {
+      canonical: `/segments/${segmentId}`,
+    }
   };
 }
 
@@ -68,7 +107,7 @@ export default async function SegmentPage({ params }: SegmentPageProps) {
               {currentSegment.name}
             </h1>
             <p className="text-xl text-[var(--color-text-secondary)] leading-relaxed max-w-3xl">
-              {currentSegment.description}
+              {segmentDefinitions[currentSegment.id] || currentSegment.description}
             </p>
           </FadeUp>
         </div>

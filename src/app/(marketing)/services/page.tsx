@@ -4,6 +4,15 @@ import { CTABanner } from "@/components/sections/CTABanner";
 import { ServiceTierCard } from "@/components/sections/ServiceTierCard";
 import { services } from "@/data/services";
 import { Check } from "lucide-react";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Services & Pricing Tiers — Websites, Automation & Custom Platforms",
+  description: "Four tiers of digital infrastructure built for Indian MSMEs, starting at ₹5,000. Websites, workflows, and custom automation architectures.",
+  alternates: {
+    canonical: "/services",
+  },
+};
 
 export default function Services() {
   return (
@@ -71,6 +80,28 @@ export default function Services() {
         subtitle="Let's have a conversation. We will audit your current pipeline and recommend the exact architecture that delivers ROI."
         buttonText="Get Free Pipeline Audit"
         buttonHref="/contact"
+      />
+      <div className="text-center py-4 text-xs text-[var(--color-text-muted)] bg-[var(--color-background-primary)]">
+        Last updated: July 2026
+      </div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Service",
+            "serviceType": "Web Automation & Technical Consulting",
+            "provider": {
+              "@type": "ProfessionalService",
+              "name": "Sequels"
+            },
+            "offers": {
+              "@type": "AggregateOffer",
+              "lowPrice": "5000",
+              "priceCurrency": "INR"
+            }
+          })
+        }}
       />
     </>
   );

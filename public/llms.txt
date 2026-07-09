@@ -1,0 +1,11 @@
+# Sequels
+> Web automation and technical consulting for Indian MSMEs
+
+Sequels builds digital infrastructure for small and medium businesses in India, replacing bloated software with lean, zero-cost architectures.
+
+## Key Pages
+- Homepage: https://services.sequels.diy/
+- Services & Pricing: https://services.sequels.diy/services
+- Industry Verticals: https://services.sequels.diy/verticals
+- About Us: https://services.sequels.diy/about
+- Contact: https://services.sequels.diy/contact

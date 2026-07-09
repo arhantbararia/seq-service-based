@@ -5,6 +5,15 @@ import { SegmentCard } from "@/components/sections/SegmentCard";
 import { verticals } from "@/data/verticals";
 import Link from "next/link";
 import { VerticalSectionHeader } from "@/components/sections/VerticalSectionHeader";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Industry Solutions — Real Estate, Professional Services & Healthcare",
+  description: "Tailored digital solutions across 22 industry segments. From independent brokers and CA firms to specialty clinics.",
+  alternates: {
+    canonical: "/verticals",
+  },
+};
 
 export default function Verticals() {
   return (
